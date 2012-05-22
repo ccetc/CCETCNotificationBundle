@@ -1,0 +1,39 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+
+{% extends 'SonataBlockBundle:Block:block_base.html.twig' %}
+
+{% block block %}
+    <link rel="stylesheet" href="{{ asset('bundles/ccetcnotification/css/notification-list.css') }}" type="text/css" media="all">
+
+    <div class="notification-list-conatiner">
+        <div class="heading">
+            <h3>Notifications</h3>
+        </div>
+        {% for instance in notifications %}
+            <div class="notification-container">
+                <div class="notification {{ instance.notification.class ? instance.notification.class : 'default' }}">
+                    <div class="short-message">{{ instance.notification.shortMessage|raw }}</div>
+                    <div class="date">{{ instance.notification.dateCreatedNice }}</div>
+                    {% if instance.notification.longMessage and instance.notification.longMessage != ""  %}
+                        <div class="long-message">
+                            {{ instance.notification.longMessage|raw }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% else %}
+            <div class="notification-container">
+                <div class="notification">No Notifications</div>
+            </div>
+        {% endfor %}
+   </div>
+{% endblock %}

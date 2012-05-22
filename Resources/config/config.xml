@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+               
+    <services>
+        <service id="ccetc.notification.admin.notification" class="CCETC\NotificationBundle\Admin\NotificationAdmin">
+            <tag name="sonata.admin" manager_type="orm" group="Notifications" label="Notifications" />
+            <argument />
+            <argument>CCETC\NotificationBundle\Entity\Notification</argument>
+            <argument>CCETCNotificationBundle:NotificationAdmin</argument>
+        </service>
+        <service id="ccetc.notification.admin.notificationinstance" class="CCETC\NotificationBundle\Admin\NotificationInstanceAdmin">
+            <tag name="sonata.admin" manager_type="orm" group="Notifications" label="Instances" />
+            <argument />
+            <argument>CCETC\NotificationBundle\Entity\NotificationInstance</argument>
+            <argument>CCETCNotificationBundle:NotificationInstanceAdmin</argument>
+        </service>
+        <service id="ccetc.notification.block.notificationlist" class="CCETC\NotificationBundle\Block\NotificationListBlockService">
+            <tag name="sonata.block" />
+            <argument>ccetc.notification.block.notificationlist</argument>
+            <argument type="service" id="templating" />
+            <argument type="service" id="service_container" />
+        </service>
+        <service id="ccetc.notification.utility" class="CCETC\NotificationBundle\Utility\UtilityHelper">
+            <argument type="service" id="service_container" />
+        </service>
+        <service id="ccetc.notification.builder" class="CCETC\NotificationBundle\Builder\NotificationBuilder">
+            <argument type="service" id="service_container" />
+        </service>
+        <service id="ccetc.notification.state" class="CCETC\NotificationBundle\State\StateHelper">
+            <argument type="service" id="service_container" />
+        </service>
+        <service id="ccetc.notification.delivery" class="CCETC\NotificationBundle\Delivery\DeliveryHelper">
+            <argument type="service" id="service_container" />
+         </service>
+    </services>
+    
+</container>
