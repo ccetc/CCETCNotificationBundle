@@ -78,7 +78,7 @@ When creating a notification specify the following values:
 - stateMethodService - service containing ``stateMethod``
 - stateMethodParamater - parameter to send to ``stateMethod``
 	
-*NOTE**
+**NOTE**
  - ``stateMethod`` must take the doctrine service as it's first parameter, and ``stateMethodParameter`` as its second
  - ``stateMethod`` must return a bool
 	
