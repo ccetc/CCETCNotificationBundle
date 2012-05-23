@@ -58,15 +58,15 @@ Create cronjobs to run the cleanup and email commands:
             'users' => $this->configurationPool->getContainer()->get('security.context')->getToken()->getUser(),
         ));
 
-Values:
+**Options**
+- values
 	- shortMessage - displayed in large text on dashboard, and in email subject
 	- longMessage - displayed in small text on dashboard, and in email body (optional)
 	- showOnDashboard - bool (default: true)
 	- sendEmail - bool (default: true)
 	- class - string added as a class name on the dashboard (optional)
 		- warning, reminder, information, newspaper, clock-red, clock-blue will include different icons
-
-Users:
+- users
 	- Array of users the notification is for (also takes a single user)
 	
 ### Custom State Methods
@@ -74,11 +74,11 @@ You can specify a method to be used to determine the active/inactive state of a 
 
 When creating a notification specify the following values:
 
-	- stateMethod - method name
-	- stateMethodService - service containing ``stateMethod``
-	- stateMethodParamater - parameter to send to ``stateMethod``
+- stateMethod - method name
+- stateMethodService - service containing ``stateMethod``
+- stateMethodParamater - parameter to send to ``stateMethod``
 	
-*NOTES*: 
+*NOTE**
  - ``stateMethod`` must take the doctrine service as it's first parameter, and ``stateMethodParameter`` as its second
  - ``stateMethod`` must return a bool
 	
