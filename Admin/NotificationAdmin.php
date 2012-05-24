@@ -18,7 +18,10 @@ class NotificationAdmin extends Admin
     {
         $listMapper
                 ->add('datetimeCreated')
-                ->add('shortMessage')		
+                ->add('shortMessage')
+                ->add('class')		
+                ->add('sendEmail')		
+                ->add('showOnDashboard')		
                 ->add('_action', 'actions', array(
                     'actions' => array(
                         'view' => array(),
@@ -40,7 +43,6 @@ class NotificationAdmin extends Admin
                 ->add('shortMessage')		
                 ->add('longMessage')		
                 ->add('class')		
-                ->add('activeUntilDateTime')		
                 ->add('sendEmail')		
                 ->add('showOnDashboard')		
         ;
@@ -52,12 +54,14 @@ class NotificationAdmin extends Admin
                 ->add('shortMessage')		
                 ->add('longMessage')		
                 ->add('class')		
-                ->add('showUntil')		
                 ->add('sendEmail')		
                 ->add('showOnDashboard')		
                 ->add('userCreatedBy')		
                 ->add('datetimeCreated')		
                 ->add('instances')		
+                ->add('dashboardStateMethod')		
+                ->add('dashboardStateMethodService')		
+                ->add('dashboardStateMethodParameters')		
 		;
     }
     public function prePersist($object)

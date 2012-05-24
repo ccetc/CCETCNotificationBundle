@@ -13,15 +13,18 @@ class EmailCommand extends ContainerAwareCommand
     {
         $this
             ->setName('ccetc:notification:sendemails')
-            ->setDescription('send all outstanding notification emails')
+            ->setDescription('send all outstanding notification emails for users with a specific frequency')
+            ->addArgument('frequency', InputArgument::REQUIRED, 'At what frequency?')                
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $frequency = $input->getArgument('frequency');
+        
         $deliveryHelper = $this->getContainer()->get('ccetc.notification.delivery');
                 
-        $count = $deliveryHelper->processAndSendNotificationEmails();
+        $count = $deliveryHelper->processAndSendNotificationEmails($frequency);
 
         $output->writeln($count.' Emails Sent');
     }

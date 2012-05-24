@@ -43,25 +43,27 @@ class NotificationListBlockService extends BaseBlockService
     {
         $entityManager = $this->container->get('doctrine')->getEntityManager();
         $settings = array_merge($this->getDefaultSettings(), $block->getSettings());
-
         $user = $this->container->get('security.context')->getToken()->getUser();
-
         $deliveryHelper = $this->container->get('ccetc.notification.delivery');
+        $utilityHelper = $this->container->get('ccetc.notification.utility');
         
-        $notifications = $deliveryHelper->findActiveByUser($user);
-        
-        foreach($notifications as $instance)
-        {
-            $instance->setHasBeenShownOnDashboard(true);
-            $entityManager->persist($instance);
+        $newNotificationInstances = $deliveryHelper->findInstancesByUser($user, true, "dashboard");
+        $oldNotificationInstances = $deliveryHelper->findInstancesByUser($user, false, "dashboard");
+
+        if($this->container->get('request')->get('showOld')) {
+            $showOld = true;
+        } else {
+            $showOld = false;
         }
-        
-        $entityManager->flush();
+
+        $utilityHelper->batchSetShownOnDashboard($newNotificationInstances);
         
         return $this->renderResponse('CCETCNotificationBundle:Block:block_notification_list.html.twig', array(
             'block'     => $block,
             'settings'  => $settings,
-            'notifications' => $notifications
+            'newNotifications' => $newNotificationInstances,
+            'oldNotifications' => $oldNotificationInstances,
+            'showOld' => $showOld
         ), $response);
     }
 

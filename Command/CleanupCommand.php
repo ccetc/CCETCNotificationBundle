@@ -13,7 +13,7 @@ class CleanupCommand extends ContainerAwareCommand
     {
         $this
             ->setName('ccetc:notification:cleanup')
-            ->setDescription('remove notifications that are inactive')
+            ->setDescription('remove notifications that are inactive and 30 days old')
         ;
     }
 
@@ -21,7 +21,7 @@ class CleanupCommand extends ContainerAwareCommand
     {
         $utilityHelper = $this->getContainer()->get('ccetc.notification.utility');
                 
-        $count = $utilityHelper->removeInactiveNotifications();
+        $count = $utilityHelper->removeOldNotifications();
 
         $output->writeln($count.' Notifications Removed');
     }

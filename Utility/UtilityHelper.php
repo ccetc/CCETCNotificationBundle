@@ -17,10 +17,10 @@ class UtilityHelper {
     }
     
     /**
-     * remove all notifications that are inactive
+     * remove all notifications that are inactive and over 30 days old
      * @return int 
      */
-    public function removeInactiveNotifications()
+    public function removeOldNotifications()
     {
         $notificationRepository = $this->container->get('doctrine')->getRepository('CCETCNotificationBundle:Notification');
         $notifications = $notificationRepository->findAll();
@@ -31,7 +31,9 @@ class UtilityHelper {
         
         foreach($notifications as $notification)
         {
-            if(!$stateHelper->notificationIsActive($notification)) {
+            $interval = $notification->getDatetimeCreated()->diff(new \DateTime());
+            $daysOld = (int) $interval->format('%a');
+            if(!$stateHelper->notificationIsActive($notification) && $daysOld > 30) {
                 $entityManager->remove($notification);
                 $notificationsRemoved++;
             }
@@ -40,6 +42,24 @@ class UtilityHelper {
         $entityManager->flush();
         
         return $notificationsRemoved;
+    }
+    
+    /**
+     * Set each hasBeenShownOnDashboard for each $instance in $instances as true.
+     * 
+     * @param array of NotificationInstances $instances 
+     */
+    public function batchSetShownOnDashboard($instances)
+    {
+        $entityManager = $this->container->get('doctrine')->getEntityManager();
+
+        foreach($instances as $instance)
+        {
+            $instance->setHasBeenShownOnDashboard(true);
+            $entityManager->persist($instance);
+        }
+        
+        $entityManager->flush();
     }
     
     

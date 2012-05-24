@@ -20,52 +20,32 @@ class DeliveryHelper {
     }
     
     /**
-     * Send an email for $instance.
+     * Send all notification instance emails that need to be sent to users that recieve emails at a specific $frequency
      * 
-     * NOTE: this will send an e-mail even if $instance->notification->sendEmail is false
-     * 
-     * @param type $instance 
-     */
-    public function sendNotificationEmail($instance)
-    {
-        $mailer = $this->container->get('mailer');
-        
-        $fromEmail = $this->container->getParameter('fos_user.registration.confirmation.from_email');
-        $applicationTitle = $this->container->getParameter('fos_user.settings.application_title');
-        
-        $message = \Swift_Message::newInstance()
-                ->setSubject($applicationTitle.' - '.$instance->getNotification()->getShortMessage())
-                ->setFrom($fromEmail)
-                ->setTo($instance->getUser()->getEmail())
-                ->setContentType('text/html')
-                ->setBody('<html>'.$instance->getNotification()->getLongMessage().'</html>')
-        ;
-        $mailer->send($message);
-    }
-    
-    /**
-     * Send all notification instance emails that need to be sent
+     * @param type $frequency - instantly|periodically|daily|never
      * @return int 
      */
-    public function processAndSendNotificationEmails()
+    public function processAndSendNotificationEmails($frequency)
     {
-        $notificationRepository = $this->container->get('doctrine')->getRepository('CCETCNotificationBundle:Notification');
+        $userRepository = $this->container->get('doctrine')->getRepository('ApplicationSonataUserBundle:User');
         $notificationInstanceAdmin = $this->container->get('ccetc.notification.admin.notificationinstance');
-
-        $notifications = $notificationRepository->findBy(array('sendEmail' => true));
-        
         $emailsSent = 0;
         
-        foreach($notifications as $notification)
+        $users = $userRepository->findBy(array('notificationEmailFrequency' => $frequency));
+        
+        foreach($users as $user)
         {
-            foreach($notification->getInstances() as $instance)
-            {
-                if(!$instance->getHasBeenEmailed()) {
-                    $this->sendNotificationEmail($instance);
+            $instancesToEmail = $this->findInstancesByUser($user, true, "email");
+
+            if($instancesToEmail) {
+                $this->sendNotificationDigestEmail($user, $instancesToEmail);
+                $emailsSent++;
+            
+                foreach($instancesToEmail as $instance)
+                {
                     $instance->setHasBeenEmailed(true);
                     $notificationInstanceAdmin->update($instance);
-                    $emailsSent++;
-                }
+                }            
             }
         }
         
@@ -73,37 +53,101 @@ class DeliveryHelper {
     }
     
     /**
-     * Find all active instances for $user
+     * Send an email to $user listing $instances.
+     * 
+     * NOTE: this will send an e-mail even if $instance->notification->sendEmail is false
+     * 
+     * @param type $instance 
+     */
+    public function sendNotificationDigestEmail($user, $instances)
+    {
+        $mailer = $this->container->get('mailer');
+        
+        $fromEmail = $this->container->getParameter('fos_user.registration.confirmation.from_email');
+        $applicationTitle = $this->container->getParameter('fos_user.settings.application_title');
+        
+        if(count($instances) == 1) $noun = "notification";
+        else $noun = "notifications";
+        
+        $body = '<html>';
+        
+        $body .= 'You have '.count($instances).' new '.$noun.':<br/><br/> ';
+        
+        foreach($instances as $instance)
+        {
+            $notification = $instance->getNotification();
+            
+            $body .= '<b>'.$notification->getShortMessage().'</b><br/>';
+            if($notification->getLongMessage()) $body .= $notification->getLongMessage().'<br/>';
+            $body .= '<br/><br/>';
+        }
+        
+        $message = \Swift_Message::newInstance()
+                ->setSubject($applicationTitle.' - '.count($instances).' '.ucfirst($noun))
+                ->setFrom($fromEmail)
+                ->setTo($user->getEmail())
+                ->setContentType('text/html')
+                ->setBody($body)
+        ;
+        $mailer->send($message);
+    }
+    
+    
+    /**
+     * Fine all instances belonging to User.
      * 
      * @param type $user
+     * @param type $active only include inactive or active instances
+     * @param type $type only include notifications of a certain type (email|dashboard)
      * @return type 
      */
-    public function findActiveByUser($user)
-    {  
+    public function findInstancesByUser($user, $active = null, $type = null)
+    {
         $doctrine = $this->container->get('doctrine');
         $entityManager = $doctrine->getEntityManager();
         $stateHelper = $this->container->get('ccetc.notification.state');        
         
-        $query = $entityManager->createQuery(
-            "SELECT   ni, u, n
+        // get all of user's instances
+        $query = "
+            SELECT   ni, u, n
             FROM     CCETCNotificationBundle:NotificationInstance ni
             JOIN     ni.user u
             JOIN     ni.notification n
-            WHERE u.id = '".$user->getId()."'
-            ORDER BY n.datetimeCreated DESC
-        ");
-
-        $instances = $query->getResult();
-        $activeInstances = array();
-                
-        foreach($instances as $instance)
-        {
-            if($stateHelper->instanceIsActive($instance)) {
-                $activeInstances[] = $instance;
-            }
+            WHERE u.id = '".$user->getId()."'";
+        
+        if(isset($type) && $type == "email") {
+            $query .= " AND n.sendEmail=1";
+        }
+        if(isset($type) && $type == "dashboard") {
+            $query .= " AND n.showOnDashboard=1";
         }
 
-        return $activeInstances;
+        $query .= " ORDER BY n.datetimeCreated DESC";
+        $instances = $entityManager->createQuery($query)->getResult();
+
+
+        if(isset($active)) {
+            if(isset($type) && $type == "dashboard") {
+                $stateMethod = "instanceIsActiveForDashboard";
+            } else if(isset($type) && $type == "email") {
+                $stateMethod = "instanceIsActiveForEmail";
+            } else {
+                $stateMethod = "instanceIsActive";
+            }
+
+            $instancesToReturn = array();            
+            
+            foreach($instances as $instance)
+            {
+                if(($active && $stateHelper->$stateMethod($instance)) || (!$active && !$stateHelper->$stateMethod($instance))) {
+                    $instancesToReturn[] = $instance;
+                }
+            }
+
+            return $instancesToReturn;
+        } else {
+            return $instances;
+        }
     }
 
     

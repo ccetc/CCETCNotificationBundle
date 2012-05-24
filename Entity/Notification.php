@@ -65,34 +65,26 @@ class Notification
     private $sendEmail;
         
     /**
-     * Notification is active until this date, provided a state method is not defined.
-     * @var date $activeUntilDateTime
+     * The service containing the method to check the dashboard state of the notification
+     * @var string $dashboardStateMethodService
      *
-     * @ORM\Column(name="activeUntilDateTime", type="date", nullable="true")
+     * @ORM\Column(name="dashboardStateMethodService", type="string", length=255, nullable="true")
      */
-    private $activeUntilDateTime;
-
+    private $dashboardStateMethodService;
     /**
-     * The service containing the method to check the state of the notification
-     * @var string $stateMethodService
+     * The method found in service to check the dashboard state of the instance
+     * @var string $dashboardStateMethod
      *
-     * @ORM\Column(name="stateMethodService", type="string", length=255, nullable="true")
+     * @ORM\Column(name="dashboardStateMethod", type="string", length=255, nullable="true")
      */
-    private $stateMethodService;
+    private $dashboardStateMethod;
     /**
-     * The method found in service to check the state of the notification, assumes the first parameter will be the doctrine instance
-     * @var string $stateMethod
+     * Array of paramters to send to $dashboardStateMethod
+     * @var string $dashboardStateMethodParameters
      *
-     * @ORM\Column(name="stateMethod", type="string", length=255, nullable="true")
+     * @ORM\Column(name="dashboardStateMethodParameters", type="text", nullable="true")
      */
-    private $stateMethod;
-    /**
-     * Optional paramter to send to $method
-     * @var string $stateMethodParameter
-     *
-     * @ORM\Column(name="stateMethodParameter", type="string", length=255, nullable="true")
-     */
-    private $stateMethodParameter;    
+    private $dashboardStateMethodParameters;    
     
    /** @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="NotificationsCreated")
     *  @ORM\JoinColumn(name="userCreatedBy_id", referencedColumnName="id", onDelete="SET NULL") 
@@ -107,16 +99,6 @@ class Notification
         if(isset($this->shortMessage)) return $this->shortMessage;
         else return '';
     }
-    
-    public function activeUntilDateTimeReached()
-    {
-        if(isset($this->activeUntilDateTime) && new \DateTime() > $this->activeUntilDateTime) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    
     
     public function getDateCreatedNice()
     {
@@ -309,142 +291,62 @@ class Notification
     }
 
     /**
-     * Set service
+     * Set dashboardStateMethodService
      *
-     * @param string $service
+     * @param string $dashboardStateMethodService
      */
-    public function setService($service)
+    public function setDashboardStateMethodService($dashboardStateMethodService)
     {
-        $this->service = $service;
+        $this->dashboardStateMethodService = $dashboardStateMethodService;
     }
 
     /**
-     * Get service
+     * Get dashboardStateMethodService
      *
      * @return string 
      */
-    public function getService()
+    public function getDashboardStateMethodService()
     {
-        return $this->service;
+        return $this->dashboardStateMethodService;
     }
 
     /**
-     * Set method
+     * Set dashboardStateMethod
      *
-     * @param string $method
+     * @param string $dashboardStateMethod
      */
-    public function setMethod($method)
+    public function setDashboardStateMethod($dashboardStateMethod)
     {
-        $this->method = $method;
+        $this->dashboardStateMethod = $dashboardStateMethod;
     }
 
     /**
-     * Get method
-     *
-     * @return string 
-     */
-    public function getMethod()
-    {
-        return $this->method;
-    }
-
-    /**
-     * Set parameter
-     *
-     * @param string $parameter
-     */
-    public function setParameter($parameter)
-    {
-        $this->parameter = $parameter;
-    }
-
-    /**
-     * Get parameter
+     * Get dashboardStateMethod
      *
      * @return string 
      */
-    public function getParameter()
+    public function getDashboardStateMethod()
     {
-        return $this->parameter;
+        return $this->dashboardStateMethod;
     }
 
     /**
-     * Set stateMethodService
+     * Set dashboardStateMethodParameters
      *
-     * @param string $stateMethodService
+     * @param text $dashboardStateMethodParameters
      */
-    public function setStateMethodService($stateMethodService)
+    public function setDashboardStateMethodParameters($dashboardStateMethodParameters)
     {
-        $this->stateMethodService = $stateMethodService;
+        $this->dashboardStateMethodParameters = $dashboardStateMethodParameters;
     }
 
     /**
-     * Get stateMethodService
+     * Get dashboardStateMethodParameters
      *
-     * @return string 
+     * @return text 
      */
-    public function getStateMethodService()
+    public function getDashboardStateMethodParameters()
     {
-        return $this->stateMethodService;
-    }
-
-    /**
-     * Set stateMethod
-     *
-     * @param string $stateMethod
-     */
-    public function setStateMethod($stateMethod)
-    {
-        $this->stateMethod = $stateMethod;
-    }
-
-    /**
-     * Get stateMethod
-     *
-     * @return string 
-     */
-    public function getStateMethod()
-    {
-        return $this->stateMethod;
-    }
-
-    /**
-     * Set stateMethodParameter
-     *
-     * @param string $stateMethodParameter
-     */
-    public function setStateMethodParameter($stateMethodParameter)
-    {
-        $this->stateMethodParameter = $stateMethodParameter;
-    }
-
-    /**
-     * Get stateMethodParameter
-     *
-     * @return string 
-     */
-    public function getStateMethodParameter()
-    {
-        return $this->stateMethodParameter;
-    }
-
-    /**
-     * Set activeUntilDateTime
-     *
-     * @param date $activeUntilDateTime
-     */
-    public function setActiveUntilDateTime($activeUntilDateTime)
-    {
-        $this->activeUntilDateTime = $activeUntilDateTime;
-    }
-
-    /**
-     * Get activeUntilDateTime
-     *
-     * @return date 
-     */
-    public function getActiveUntilDateTime()
-    {
-        return $this->activeUntilDateTime;
+        return $this->dashboardStateMethodParameters;
     }
 }
