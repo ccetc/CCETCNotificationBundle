@@ -2,6 +2,9 @@
 
 Provides tools to generating, storing, and delivery application notificatons via e-mail and a "dashboard".
 
+## Note
+This bundle is developed alongside our own forks of SonataAdminBundle, SonataUserBundle, FOSUserBundle, and SonataDoctrineORMAdminBundle.  It has not been testing with the original versions of those bundles.
+
 ## Features
 - Admin Interface for managing Notifications
 - SonataAdmin Dashboard Block
