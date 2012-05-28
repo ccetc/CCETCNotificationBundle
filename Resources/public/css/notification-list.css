@@ -1,52 +1,31 @@
-.notification-list-conatiner {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    margin: 0 0 15px 0;
-}
-
-.notification-list-conatiner .notification-container {
-    border-bottom: 1px solid #eee;
-    font-size: 16px;
-    overflow: auto;
-}
-
-.notification-list-conatiner .notification-container .notification {
-    padding: 8px 6px 8px 30px;
-    background: no-repeat 7px 9px;
-    overflow: auto;
-}
-
-
-.notification-list-conatiner .notification-container .default {
+.ccetc-widget-container .ccetc-item-container .default {
     background-image: url(../images/world.png);
 }
 
-.notification-list-conatiner .notification-container .warning {
+.ccetc-widget-container .ccetc-item-container .warning {
     background-image: url(../images/warning.png);
 }
-.notification-list-conatiner .notification-container .reminder {
+.ccetc-widget-container .ccetc-item-container .reminder {
     background-image: url(../images/reminder.png);
 }
-.notification-list-conatiner .notification-container .information {
+.ccetc-widget-container .ccetc-item-container .information {
     background-image: url(../images/information.png);
 }
-.notification-list-conatiner .notification-container .clock-blue {
+.ccetc-widget-container .ccetc-item-container .clock-blue {
     background-image: url(../images/clock_blue.png);
 }
-.notification-list-conatiner .notification-container .clock-red {
+.ccetc-widget-container .ccetc-item-container .clock-red {
     background-image: url(../images/clock_red.png);
 }
-.notification-list-conatiner .notification-container .newspaper {
+.ccetc-widget-container .ccetc-item-container .newspaper {
     background-image: url(../images/newspaper.png);
 }
 
-.notification-list-conatiner .notification-container .short-message {
+.ccetc-widget-container .ccetc-item-container .short-message {
     float: left; 
 }
 
-.notification-list-conatiner .notification-container .long-message {
+.ccetc-widget-container .ccetc-item-container .long-message {
     font-size: 12px;
     color: #666;
     float: left;
@@ -54,16 +33,9 @@
 }
 
 
-.notification-list-conatiner .notification-container .date {
+.ccetc-widget-container .ccetc-item-container .date {
     color: #ccc;
     float: right;
     font-size: 12px;
     margin-top: 5px;
 }
-
-.notification-list-conatiner .heading {
-    background-image: -moz-linear-gradient(-90deg, #f8f8f8 , #e2e2e2);
-    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#F8F8F8), to(#E2E2E2));
-    padding: 0 12px;
-}
-

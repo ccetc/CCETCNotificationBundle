@@ -50,12 +50,6 @@ class NotificationListBlockService extends BaseBlockService
         $newNotificationInstances = $deliveryHelper->findInstancesByUser($user, true, "dashboard");
         $oldNotificationInstances = $deliveryHelper->findInstancesByUser($user, false, "dashboard");
 
-        if($this->container->get('request')->get('showOld')) {
-            $showOld = true;
-        } else {
-            $showOld = false;
-        }
-
         $utilityHelper->batchSetShownOnDashboard($newNotificationInstances);
         
         return $this->renderResponse('CCETCNotificationBundle:Block:block_notification_list.html.twig', array(
@@ -63,7 +57,6 @@ class NotificationListBlockService extends BaseBlockService
             'settings'  => $settings,
             'newNotifications' => $newNotificationInstances,
             'oldNotifications' => $oldNotificationInstances,
-            'showOld' => $showOld
         ), $response);
     }
 

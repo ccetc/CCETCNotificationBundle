@@ -14,35 +14,24 @@ file that was distributed with this source code.
 {% block block %}
     <link rel="stylesheet" href="{{ asset('bundles/ccetcnotification/css/notification-list.css') }}" type="text/css" media="all">
 
-    <div class="notification-list-conatiner">
-        <div class="heading">
-            <h3>Notifications</h3>
+    <div class="ccetc-widget-container">
+        <div class="ccetc-widget-heading">
+            <h3>Notifications
+            {% if newNotifications|length > 0 %}
+                <span class="item-count">
+                    {{ newNotifications|length }}
+                </span>
+                &nbsp;
+            {% endif %}
+            </h3>
+            
         </div>
         {% for instance in newNotifications %}
-            {% include 'CCETCNotificationBundle:Block:_notification.html.twig' with {'instance' : instance} %}
+            {% include 'CCETCNotificationBundle:Block:_notification.html.twig' with {'instance' : instance, 'active' : true } %}
         {% endfor %}
 
-        {% if newNotifications|length == 0 and oldNotifications|length == 0 %}
-            <div class="notification-container">
-                <div class="notification">No Notifications</div>
-            </div>
-        {% elseif newNotifications|length == 0 and not showOld %}
-            <div class="notification-container">
-                <div class="notification">No New Notifications</div>
-            </div>
-            <div class="notification-container" style="padding: 6px; text-align: center; font-size: 12px;">
-                <a href="?showOld=1">view old</a>
-            </div>
-        {% elseif oldNotifications|length > 0 and not showOld %}
-            <div class="notification-container" style="padding: 6px; text-align: center; font-size: 12px;">
-                <a href="?showOld=1">more</a>
-            </div>            
-        {% endif %}
-            
-        {% if showOld %}    
-            {% for instance in oldNotifications %}
-                {% include 'CCETCNotificationBundle:Block:_notification.html.twig' with {'instance' : instance} %}
-            {% endfor %}
-        {% endif %}
+        {% for instance in oldNotifications %}
+            {% include 'CCETCNotificationBundle:Block:_notification.html.twig' with {'instance' : instance } %}
+        {% endfor %}
    </div>
 {% endblock %}
