@@ -24,14 +24,15 @@ file that was distributed with this source code.
                 &nbsp;
             {% endif %}
             </h3>
-            
         </div>
-        {% for instance in newNotifications %}
-            {% include 'CCETCNotificationBundle:Block:_notification.html.twig' with {'instance' : instance, 'active' : true } %}
-        {% endfor %}
-
-        {% for instance in oldNotifications %}
-            {% include 'CCETCNotificationBundle:Block:_notification.html.twig' with {'instance' : instance } %}
-        {% endfor %}
+        {% include 'CCETCNotificationBundle:Notification:_notification_list.html.twig' with {'instances' : newNotifications, 'active' : true } %}
+        {% include 'CCETCNotificationBundle:Notification:_notification_list.html.twig' with {'instances' : oldNotifications, 'active' : false } %}
+        {% if oldNotifications|length == 0 and newNotifications|length == 0 %}
+            <div class="ccetc-item-container">
+                <div class="ccetc-item ccetc-meta-item">
+                    No Notifications
+                </div>
+            </div>
+        {% endif %}        
    </div>
 {% endblock %}

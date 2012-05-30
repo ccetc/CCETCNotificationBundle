@@ -1,0 +1,34 @@
+{% extends base_template %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/ccetcnotification/css/notification-list.css') }}" type="text/css" media="all">
+{% endblock %}
+    
+{% block title %}
+    My Notifications
+{% endblock %}
+    
+{% block page_header %}
+    <small><a href="#">Dashboard</a> / </small> Notifications
+{% endblock %}    
+
+{% block content %}
+    <ul class="pills">
+        <li class="active"><a href="#">My Notifications</a></li>
+        <li><a href="#">Sent Notifications</a></li>
+        <li><a href="#">Notify Staff</a></li>
+    </ul>
+          
+    <div class="ccetc-widget-container span10">
+        {% include 'CCETCNotificationBundle:Notification:_notification_list.html.twig' with {'instances' : instances, 'active' : false } %}
+        {% if instances|length == 0 %}
+            <div class="ccetc-item-container">
+                <div class="ccetc-item ccetc-meta-item">
+                    No Notifications
+                </div>
+            </div>
+        {% endif %}
+
+    </div>
+{% endblock %}
