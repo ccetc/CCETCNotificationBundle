@@ -12,16 +12,35 @@ use Sonata\AdminBundle\Route\RouteCollection;
 
 class NotificationAdmin extends Admin
 {    
-    protected $entityIconPath = 'bundles/ccetcnotification/images/world.png';
+    protected $entityIconPath = 'icon-globe';
+    
+    public function configureRoutes(RouteCollection $collection)
+    {
+        $collection->add('myNotifications', 'my-notifications');
+        $collection->add('notifyStaff', 'notify-staff');
+    }
+    
+    public $listPreHook = array(
+        'template' => 'CCETCNotificationBundle:Notification:_menu.html.twig'
+    );
+    public $formPreHook = array(
+        'template' => 'CCETCNotificationBundle:Notification:_menu.html.twig'
+    );
+    
+    public $userAdmin;
+    
+    public function initialize()
+    {
+        parent::initialize();
+        $this->userAdmin = $this->getConfigurationPool()->getContainer()->get('sonata.user.admin.user');
+    }
     
     protected function configureListFields(ListMapper $listMapper)
     {
+        
         $listMapper
-                ->add('datetimeCreated')
-                ->add('shortMessage')
-                ->add('class')		
-                ->add('sendEmail')		
-                ->add('showOnDashboard')		
+                ->add('shortMessage', null, array('label' => 'Notification','template' => 'CCETCNotificationBundle:Notification:_list_notification.html.twig'))
+                ->add('instances', null, array('label' => $this->trans('users', array(), 'SonataUserBundle').' sent to','template' => 'CCETCNotificationBundle:Notification:_list_staff.html.twig'))
                 ->add('_action', 'actions', array(
                     'actions' => array(
                         'view' => array(),
@@ -35,33 +54,59 @@ class NotificationAdmin extends Admin
     
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
+        $datagridMapper
+                ->add('userCreatedBy', null, array('isInvisible' => true))
+        ;
+
+        $user = $this->configurationPool->getContainer()->get('security.context')->getToken()->getUser();
+        
+        $this->filterDefaults = array(
+            'userCreatedBy' => $user->getId()
+        );
         
     }
     protected function configureFormFields(FormMapper $formMapper)
     {
+        $userRepository = $this->configurationPool->getContainer()->get('doctrine')->getRepository("ApplicationSonataUserBundle:User");
+        $users = $userRepository->findAll();
+        $userChoices = array();
+        
+        foreach($users as $user)
+        {
+            $userChoices[$user->getId()] = $user->__toString();
+        }
+
+        
         $formMapper
                 ->add('shortMessage')		
-                ->add('longMessage')		
-                ->add('class')		
+                ->add('longMessage', null, array('label' => 'Long Message (optional)'))		
+                ->add('users', 'choice', array(
+                    'label' => $this->trans('users', array(), 'SonataUserBundle').' to send to',
+                    'property_path' => false,
+                    'multiple' => true,
+                    'expanded' => true,
+                    'choices' => $userChoices
+                ))
+                ->add('class', 'choice', array('label' => 'Type', 'choices' => array(
+                    'icon-globe green' => 'normal notification',
+                    'icon-attention red' => 'alert',
+                    'icon-bell orange' => 'reminder',
+                    'icon-info-circle lightBlue' => 'information',
+                )))
                 ->add('sendEmail')		
-                ->add('showOnDashboard')		
+                ->add('showOnDashboard')
         ;
-               
     }
+    
     protected function configureShowField(ShowMapper $showMapper)
     {
         $showMapper
                 ->add('shortMessage')		
                 ->add('longMessage')		
-                ->add('class')		
                 ->add('sendEmail')		
                 ->add('showOnDashboard')		
-                ->add('userCreatedBy')		
                 ->add('datetimeCreated')		
-                ->add('instances')		
-                ->add('dashboardStateMethod')		
-                ->add('dashboardStateMethodService')		
-                ->add('dashboardStateMethodParameters')		
+                ->add('instances', null, array('label' => $this->trans('users', array(), 'SonataUserBundle').' sent to','template' => 'CCETCNotificationBundle:Notification:_show_users.html.twig'))                
 		;
     }
     public function prePersist($object)

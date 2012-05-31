@@ -1,3 +1,10 @@
 {% for instance in instances %}
-    {% include 'CCETCNotificationBundle:Notification:_notification.html.twig' with {'instance' : instance, 'active' : active } %}
+    {% include 'CCETCNotificationBundle:Notification:_notification.html.twig' with {'notification' : instance.notification, 'active' : active } %}
 {% endfor %}
+{% if instances|length == 0 %}
+    <div class="ccetc-item-container">
+        <div class="ccetc-item ccetc-meta-item">
+            {{ noNotificationText is defined ? noNotificationText : 'No Notifications' }}
+        </div>
+    </div>
+{% endif %}        

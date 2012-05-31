@@ -3,7 +3,7 @@
 Provides tools to generating, storing, and delivery application notificatons via e-mail and a "dashboard".
 
 ## Note
-This bundle is developed alongside our own forks of SonataAdminBundle, SonataUserBundle, FOSUserBundle, and SonataDoctrineORMAdminBundle.  It has not been testing with the original versions of those bundles.
+This bundle is developed alongside our own forks of SonataAdminBundle, SonataUserBundle, FOSUserBundle, and SonataDoctrineORMAdminBundle.  It has not been testing with the original versions of those bundles.  It is a work in progress and has not yet been used in production.
 
 ## Features
 - Admin Interface for managing Notifications
@@ -60,7 +60,7 @@ Create cronjobs to run the cleanup and email commands:
                 'longMessage' => 'A an Error Report has been submitted: <a href="'.$this->generateObjectUrl('show', $object).'">'.$object->__toString().'</a>',
                 'showOnDashboard' => true,
                 'sendEmail' => true,
-                'class' => 'new-farmer',
+                'class' => 'icon-bell',
             ),
             'users' => $this->configurationPool->getContainer()->get('security.context')->getToken()->getUser(),
         ));
@@ -71,8 +71,8 @@ Create cronjobs to run the cleanup and email commands:
 	- longMessage - displayed in small text on dashboard, and in email body (optional)
 	- showOnDashboard - bool (default: true)
 	- sendEmail - bool (default: true)
-	- class - string added as a class name on the dashboard (optional)
-		- warning, reminder, information, newspaper, clock-red, clock-blue will include different icons
+	- class - fontello font icon class given (optional)
+		- set up to use 'icon-globe green', 'icon-attention red', 'icon-bell orange', 'icon-info-circle lightBlue'
 - users
 	- Array of users the notification is for (also takes a single user)
 	
@@ -88,14 +88,6 @@ When creating a notification specify the following values:
 **NOTE**
  - `` dashboardStateMethod`` must return a bool
 	
-### Custom Dashboard Icon
-Add a style to match your custom notifcation classes:
-
-	.notification-list-conatiner .notification-container .your-class {
-		background-image: url(your-icon);
-	}
-
-
 
 ## Documentation
 All ISSUES, IDEAS, and FEATURES are documented on the [trello board](https://trello.com/board/notificationbundle/4fbb871762bd30482a494fe0).

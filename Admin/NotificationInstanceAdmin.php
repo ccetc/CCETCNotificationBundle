@@ -12,7 +12,7 @@ use Sonata\AdminBundle\Route\RouteCollection;
 
 class NotificationInstanceAdmin extends Admin
 {    
-    protected $entityIconPath = 'bundles/ccetcnotification/images/world.png';
+    protected $entityIconPath = 'icon-globe';
     
     protected $entityLabelPlural = "Instances";
     
@@ -23,7 +23,6 @@ class NotificationInstanceAdmin extends Admin
                 ->add('notification')		
                 ->add('hasBeenEmailed')		
                 ->add('hasBeenShownOnDashboard')
-//                ->add('isActive?', 'string', array('template' => 'CCETCNotificationBundle:NotificationInstance:_listIsActive.html.twig'))
                 ->add('_action', 'actions', array(
                     'actions' => array(
                         'view' => array(),

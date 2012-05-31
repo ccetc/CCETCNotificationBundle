@@ -9,16 +9,8 @@
     My Notifications
 {% endblock %}
     
-{% block page_header %}
-    <small><a href="#">Dashboard</a> / </small> Notifications
-{% endblock %}    
-
 {% block content %}
-    <ul class="pills">
-        <li class="active"><a href="#">My Notifications</a></li>
-        <li><a href="#">Sent Notifications</a></li>
-        <li><a href="#">Notify Staff</a></li>
-    </ul>
+    {% include 'CCETCNotificationBundle:Notification:_menu.html.twig' with {'admin' : admin, 'action' : action } %}
           
     <div class="ccetc-widget-container span10">
         {% include 'CCETCNotificationBundle:Notification:_notification_list.html.twig' with {'instances' : instances, 'active' : false } %}

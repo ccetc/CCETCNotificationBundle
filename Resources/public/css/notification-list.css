@@ -1,39 +1,15 @@
-.ccetc-widget-container .ccetc-item-container .default {
-    background-image: url(../images/world.png);
-}
-
-.ccetc-widget-container .ccetc-item-container .warning {
-    background-image: url(../images/warning.png);
-}
-.ccetc-widget-container .ccetc-item-container .reminder {
-    background-image: url(../images/reminder.png);
-}
-.ccetc-widget-container .ccetc-item-container .information {
-    background-image: url(../images/information.png);
-}
-.ccetc-widget-container .ccetc-item-container .clock-blue {
-    background-image: url(../images/clock_blue.png);
-}
-.ccetc-widget-container .ccetc-item-container .clock-red {
-    background-image: url(../images/clock_red.png);
-}
-.ccetc-widget-container .ccetc-item-container .newspaper {
-    background-image: url(../images/newspaper.png);
-}
-
-.ccetc-widget-container .ccetc-item-container .short-message {
+.ccetc-item-container .short-message {
     float: left; 
 }
 
-.ccetc-widget-container .ccetc-item-container .long-message {
+.ccetc-item-container .long-message {
     font-size: 12px;
     color: #666;
     float: left;
     width: 100%;
 }
 
-
-.ccetc-widget-container .ccetc-item-container .date {
+.ccetc-item-container .date {
     color: #ccc;
     float: right;
     font-size: 12px;

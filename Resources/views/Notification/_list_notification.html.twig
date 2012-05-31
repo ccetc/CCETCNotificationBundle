@@ -1,0 +1,6 @@
+{% extends 'SonataAdminBundle:CRUD:base_list_field.html.twig' %}
+
+{% block field%}
+    <link rel="stylesheet" href="{{ asset('bundles/ccetcnotification/css/notification-list.css') }}" type="text/css" media="all">
+    {% include 'CCETCNotificationBundle:Notification:_notification.html.twig' with {'notification' : object, 'active' : false, 'last' : true } %}
+{% endblock %}
