@@ -64,7 +64,7 @@ class Notification
         else return '';
     }
     
-    public function getDateCreatedNice()
+    public function getDateTimeCreatedNice()
     {
         $date = $this->getDatetimeCreated()->format('d/m/Y');
         

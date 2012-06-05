@@ -35,7 +35,7 @@ class DeliveryHelper {
         
         foreach($users as $user)
         {
-            $instancesToEmail = $this->findInstancesByUser($user, true);
+            $instancesToEmail = $this->findInstancesByUser($user, true, false);
 
             if($instancesToEmail) {
                 $this->sendNotificationDigestEmail($user, $instancesToEmail);
@@ -69,16 +69,23 @@ class DeliveryHelper {
         
         $body = '<html>';
         
-        $body .= 'You have '.count($instances).' new '.$noun.':<br/><br/> ';
+        $body .= 'You have '.count($instances).' new '.$noun.' on <a href="'.$this->getContainer()->getParameter('my_cce_app.server_address').'">MyCCE</a>:<br/><br/> ';
         
+        $body .= '<div style="width: 600px; margin: 0 auto; border: 1px solid #eee;">';
         foreach($instances as $instance)
         {
             $notification = $instance->getNotification();
             
-            $body .= '<b>'.$notification->getShortMessage().'</b><br/>';
-            if($notification->getLongMessage()) $body .= $notification->getLongMessage().'<br/>';
-            $body .= '<br/><br/>';
+            $body .= '<div style="border-bottom: 1px solid #eee; padding: 6px 8px; overflow: auto;">';
+            $body .= '<div style="overflow: auto;"><div style="float: left; font-weight: bold;">'.$notification->getShortMessage().'</div>';
+            $body .= '<div style="float: right; color: #666;">'.$notification->getDateTimeCreatedNice().'</div></div>';
+            if($notification->getLongMessage()) $body .= '<div style="float: left;">'.$notification->getLongMessage().'</div>';
+            $body .= '</div>';
         }
+        
+        $body .= '</div>';
+        
+        $body .= '<br/><br/><span style="color: #666;">Control how often you receive notification emails on your <a href="'.$this->getContainer()->getParameter('my_cce_app.server_address').$this->getContainer()->get('router')->generate('fos_user_profile_show').'">Profile Page</a></span>';
         
         $message = \Swift_Message::newInstance()
                 ->setSubject($applicationTitle.' - '.count($instances).' '.ucfirst($noun))
@@ -98,7 +105,7 @@ class DeliveryHelper {
      * @param bool $active only include inactive or active instances
      * @return type 
      */
-    public function findInstancesByUser($user, $active = null)
+    public function findInstancesByUser($user, $active = null, $hasBeenEmailed = null)
     {
         $doctrine = $this->container->get('doctrine');
         $entityManager = $doctrine->getEntityManager();
@@ -106,6 +113,10 @@ class DeliveryHelper {
         if(isset($active)) {
             if($active) $active = 1;
             else $active = 0;
+        }
+        if(isset($hasBeenEmailed)) {
+            if($hasBeenEmailed) $hasBeenEmailed = 1;
+            else $hasBeenEmailed = 0;
         }
         
         // get all of user's instances
@@ -118,6 +129,9 @@ class DeliveryHelper {
         
         if(isset($active)) {
             $query .= "AND ni.active=".$active;
+        }
+        if(isset($hasBeenEmailed)) {
+            $query .= "AND ni.hasBeenEmailed=".$hasBeenEmailed;
         }
 
         $query .= " ORDER BY n.datetimeCreated DESC";

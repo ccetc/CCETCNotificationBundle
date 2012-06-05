@@ -5,7 +5,7 @@
                 <i class="{{ notification.class ? notification.class : 'icon-globe green' }}"></i>
                 {{ notification.shortMessage|raw }}
             </div>
-            <div class="date">{{ notification.dateCreatedNice }}</div>
+            <div class="date">{{ notification.dateTimeCreatedNice }}</div>
         </div>
         {% if notification.longMessage and notification.longMessage != ""  %}
             <div class="long-message">

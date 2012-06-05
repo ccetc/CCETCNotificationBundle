@@ -9,7 +9,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('ccetc_error_report');
+        $rootNode = $treeBuilder->root('ccetc_notification');
 
         return $treeBuilder;
     }
