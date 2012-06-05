@@ -53,13 +53,13 @@ Create cronjobs to run the cleanup and email commands:
 
 
 ## Use
+Notifications are primarily shown on the dashboard.  Once they are shown they are considered "inactive", but can still be seen on the "My Notifications" page.  The provided commands for email notifications send digest emails of inactive notifications according to the frequency a user has selected to receive them.  This ensures they only get e-mailed about notifications they haven't seen.
+
 ### Creating Notifications
         $this->configurationPool->getContainer()->get('ccetc.notification.builder')->createNotification(array(
             'values' => array(
                 'shortMessage' => 'Error Report Submitted',
                 'longMessage' => 'A an Error Report has been submitted: <a href="'.$this->generateObjectUrl('show', $object).'">'.$object->__toString().'</a>',
-                'showOnDashboard' => true,
-                'sendEmail' => true,
                 'class' => 'icon-bell',
             ),
             'users' => $this->configurationPool->getContainer()->get('security.context')->getToken()->getUser(),
@@ -69,25 +69,13 @@ Create cronjobs to run the cleanup and email commands:
 - values
 	- shortMessage - displayed in large text on dashboard, and in email subject
 	- longMessage - displayed in small text on dashboard, and in email body (optional)
-	- showOnDashboard - bool (default: true)
-	- sendEmail - bool (default: true)
 	- class - fontello font icon class given (optional)
 		- set up to use 'icon-globe green', 'icon-attention red', 'icon-bell orange', 'icon-info-circle lightBlue'
 - users
 	- Array of users the notification is for (also takes a single user)
 	
-### Custom State Methods
-You can specify a method to be used to determine the active/inactive state of a particular dashboard notification.
-
-When creating a notification specify the following values:
-
-- dashboardStateMethod - method name
-- dashboardStateMethodService - service containing `` dashboardStateMethod``
-- dashboardStateMethodParamater - parameters to send to `` dashboardStateMethod`` (will be eval'd as an array)
-	
-**NOTE**
- - `` dashboardStateMethod`` must return a bool
-	
+### Custom Active States
+To have more control over the active/inactive state of an instance, you can attach an object to an instance.  This should be done entirely in your external entity/bundle.  If you do this, you should set ``$instance->hasAssociatedObject`` to ``true``.  If this value is true, $instance->active will not be set to false when shown on the dashboard, and the bundle will assume that your bundle will handle the inactivation of this notification.
 
 ## Documentation
 All ISSUES, IDEAS, and FEATURES are documented on the [trello board](https://trello.com/board/notificationbundle/4fbb871762bd30482a494fe0).

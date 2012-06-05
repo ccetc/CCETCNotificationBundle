@@ -93,8 +93,6 @@ class NotificationAdmin extends Admin
                     'icon-bell orange' => 'reminder',
                     'icon-info-circle lightBlue' => 'information',
                 )))
-                ->add('sendEmail')		
-                ->add('showOnDashboard')
         ;
     }
     
@@ -103,8 +101,6 @@ class NotificationAdmin extends Admin
         $showMapper
                 ->add('shortMessage')		
                 ->add('longMessage')		
-                ->add('sendEmail')		
-                ->add('showOnDashboard')		
                 ->add('datetimeCreated')		
                 ->add('instances', null, array('label' => $this->trans('users', array(), 'SonataUserBundle').' sent to','template' => 'CCETCNotificationBundle:Notification:_show_users.html.twig'))                
 		;

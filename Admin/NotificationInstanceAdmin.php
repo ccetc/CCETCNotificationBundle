@@ -22,7 +22,7 @@ class NotificationInstanceAdmin extends Admin
                 ->add('user')
                 ->add('notification')		
                 ->add('hasBeenEmailed')		
-                ->add('hasBeenShownOnDashboard')
+                ->add('active')
                 ->add('_action', 'actions', array(
                     'actions' => array(
                         'view' => array(),
@@ -39,8 +39,6 @@ class NotificationInstanceAdmin extends Admin
         $datagridMapper
                 ->add('user')
                 ->add('notification')		
-                ->add('hasBeenEmailed')		
-                ->add('hasBeenShownOnDashboard')		
         ;
     }
     protected function configureFormFields(FormMapper $formMapper)
@@ -49,7 +47,7 @@ class NotificationInstanceAdmin extends Admin
                 ->add('user')
                 ->add('notification')		
                 ->add('hasBeenEmailed')		
-                ->add('hasBeenShownOnDashboard')		
+                ->add('active')		
         ;
                
     }
@@ -59,7 +57,7 @@ class NotificationInstanceAdmin extends Admin
                 ->add('user')
                 ->add('notification')		
                 ->add('hasBeenEmailed')		
-                ->add('hasBeenShownOnDashboard')		
+                ->add('active')		
 		;
     }    
 }

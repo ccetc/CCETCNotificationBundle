@@ -50,20 +50,6 @@ class Notification
      */
     private $class;    
     
-    /**
-    * @var smallint $showOnDashboard
-    *
-    * @ORM\Column(name="showOnDashboard", type="boolean", nullable="true")
-    */
-    private $showOnDashboard;
-
-    /**
-    * @var smallint $sendEmail
-    *
-    * @ORM\Column(name="sendEmail", type="boolean", nullable="true")
-    */
-    private $sendEmail;
-        
    /** @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="NotificationsCreated")
     *  @ORM\JoinColumn(name="userCreatedBy_id", referencedColumnName="id", onDelete="SET NULL") 
     */
@@ -196,46 +182,6 @@ class Notification
     }
 
     /**
-     * Set showOnDashboard
-     *
-     * @param boolean $showOnDashboard
-     */
-    public function setShowOnDashboard($showOnDashboard)
-    {
-        $this->showOnDashboard = $showOnDashboard;
-    }
-
-    /**
-     * Get showOnDashboard
-     *
-     * @return boolean 
-     */
-    public function getShowOnDashboard()
-    {
-        return $this->showOnDashboard;
-    }
-
-    /**
-     * Set sendEmail
-     *
-     * @param boolean $sendEmail
-     */
-    public function setSendEmail($sendEmail)
-    {
-        $this->sendEmail = $sendEmail;
-    }
-
-    /**
-     * Get sendEmail
-     *
-     * @return boolean 
-     */
-    public function getSendEmail()
-    {
-        return $this->sendEmail;
-    }
-
-    /**
      * Set userCreatedBy
      *
      * @param Application\Sonata\UserBundle\Entity\User $userCreatedBy
@@ -257,8 +203,6 @@ class Notification
     public function __construct()
     {
         $this->instances = new \Doctrine\Common\Collections\ArrayCollection();
-        if(!$this->getSendEmail()) $this->setSendEmail(true);
-        if(!$this->getShowOnDashboard()) $this->setShowOnDashboard(true);
     }
     
     /**

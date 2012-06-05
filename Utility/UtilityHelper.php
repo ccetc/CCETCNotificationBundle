@@ -44,17 +44,17 @@ class UtilityHelper {
     }
     
     /**
-     * Set each hasBeenShownOnDashboard for each $instance in $instances as true.
+     * Set $instance as inactive
      * 
      * @param array of NotificationInstances $instances 
      */
-    public function batchSetShownOnDashboard($instances)
+    public function batchSetInactive($instances)
     {
         $entityManager = $this->container->get('doctrine')->getEntityManager();
 
         foreach($instances as $instance)
         {
-            $instance->setHasBeenShownOnDashboard(true);
+            $instance->setActive(false);
             $entityManager->persist($instance);
         }
         

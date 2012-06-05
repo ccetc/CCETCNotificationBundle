@@ -49,8 +49,8 @@ class NotificationListBlockService extends BaseBlockService
         $notificationAdmin = $this->container->get('ccetc.notification.admin.notification');
                 
         
-        $newNotificationInstances = $deliveryHelper->findInstancesByUser($user, true, "dashboard");
-        $oldNotificationInstances = $deliveryHelper->findInstancesByUser($user, false, "dashboard");
+        $newNotificationInstances = $deliveryHelper->findInstancesByUser($user, true);
+        $oldNotificationInstances = $deliveryHelper->findInstancesByUser($user, false);
         
         if(count($oldNotificationInstances) > 0) {
             $hasOldNotifications = true;
@@ -58,7 +58,7 @@ class NotificationListBlockService extends BaseBlockService
             $hasOldNotifications = false;
         }
         
-        $utilityHelper->batchSetShownOnDashboard($newNotificationInstances);
+        $utilityHelper->batchSetInactive($newNotificationInstances);
         
         return $this->renderResponse('CCETCNotificationBundle:Block:block_notification_list.html.twig', array(
             'block'     => $block,

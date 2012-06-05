@@ -35,7 +35,7 @@ class DeliveryHelper {
         
         foreach($users as $user)
         {
-            $instancesToEmail = $this->findInstancesByUser($user, true, "email");
+            $instancesToEmail = $this->findInstancesByUser($user, true);
 
             if($instancesToEmail) {
                 $this->sendNotificationDigestEmail($user, $instancesToEmail);
@@ -54,8 +54,6 @@ class DeliveryHelper {
     
     /**
      * Send an email to $user listing $instances.
-     * 
-     * NOTE: this will send an e-mail even if $instance->notification->sendEmail is false
      * 
      * @param type $instance 
      */
@@ -97,11 +95,10 @@ class DeliveryHelper {
      * Fine all instances belonging to User.
      * 
      * @param type $user
-     * @param type $active only include inactive or active instances
-     * @param type $type only include notifications of a certain type (email|dashboard)
+     * @param bool $active only include inactive or active instances
      * @return type 
      */
-    public function findInstancesByUser($user, $active = null, $type = null)
+    public function findInstancesByUser($user, $active = null)
     {
         $doctrine = $this->container->get('doctrine');
         $entityManager = $doctrine->getEntityManager();
@@ -119,24 +116,8 @@ class DeliveryHelper {
             JOIN     ni.notification n
             WHERE u.id = '".$user->getId()."'";
         
-        if(isset($type)) {
-            if($type == "email") {
-                $query .= " AND n.sendEmail=1";
-
-                if(isset($active) && $active) {
-                    $query .= " AND ni.activeForEmail=".$active;
-                }
-            } else if($type == "dashboard") {
-                $query .= " AND n.showOnDashboard=1";
-
-                if(isset($active)) {
-                    $query .= " AND ni.activeForDashboard=".$active;
-                }
-            }
-        } else if(isset($active) && $active) {
-            $query .= "AND (ni.activeForDashboard=1 OR vi.activeForEmail=1)";
-        } else if(isset($active) && !$active) {
-            $query .= "AND (ni.activeForDashboard=0 AND vi.activeForEmail=0)";
+        if(isset($active)) {
+            $query .= "AND ni.active=".$active;
         }
 
         $query .= " ORDER BY n.datetimeCreated DESC";

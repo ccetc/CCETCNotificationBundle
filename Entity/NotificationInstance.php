@@ -29,13 +29,6 @@ class NotificationInstance
 
     /** @ORM\ManyToOne(targetEntity="CCETC\NotificationBundle\Entity\Notification", inversedBy="instances") */
     protected $notification;
-  
-    /**
-    * @var smallint $hasBeenShownOnDashboard
-    *
-    * @ORM\Column(name="hasBeenShownOnDashboard", type="boolean", nullable="true")
-    */
-    private $hasBeenShownOnDashboard;
 
     /**
     * @var smallint $hasBeenEmailed
@@ -45,18 +38,11 @@ class NotificationInstance
     private $hasBeenEmailed;
 
    /**
-    * @var smallint $activeForDashboard
+    * @var smallint $active
     *
-    * @ORM\Column(name="activeForDashboard", type="boolean", nullable="true")
+    * @ORM\Column(name="active", type="boolean", nullable="true")
     */
-    private $activeForDashboard;
-    
-   /**
-    * @var smallint $activeForEmail
-    *
-    * @ORM\Column(name="activeForEmail", type="boolean", nullable="true")
-    */
-    private $activeForEmail;
+    private $active;
     
    /**
     * @var smallint $hasAssociatedObject
@@ -75,14 +61,7 @@ class NotificationInstance
     public function __construct()
     {
         if(!isset($this->hasBeenEmailed)) $this->hasBeenEmailed = false;
-        if(!isset($this->hasBeenShownOnDashboard)) $this->hasBeenShownOnDashboard = false;
-        if(!isset($this->activeForEmail)) $this->activeForEmail = true;
-        if(!isset($this->activeForDashboard)) $this->activeForDashboard = true;
-    }
-    
-    public function getActive()
-    {
-        return $this->activeForDashboard || $this->activeForEmail;
+        if(!isset($this->active)) $this->active = true;
     }
     
     /**
@@ -136,38 +115,12 @@ class NotificationInstance
     }
 
     /**
-     * Set hasBeenShownOnDashboard
-     *
-     * @param boolean $hasBeenShownOnDashboard
-     */
-    public function setHasBeenShownOnDashboard($hasBeenShownOnDashboard)
-    {
-        if(!$this->hasAssociatedObject && $hasBeenShownOnDashboard) {
-            $this->activeForDashboard = false;
-        }
-        $this->hasBeenShownOnDashboard = $hasBeenShownOnDashboard;
-    }
-
-    /**
-     * Get hasBeenShownOnDashboard
-     *
-     * @return boolean 
-     */
-    public function getHasBeenShownOnDashboard()
-    {
-        return $this->hasBeenShownOnDashboard;
-    }
-
-    /**
      * Set hasBeenEmailed
      *
      * @param boolean $hasBeenEmailed
      */
     public function setHasBeenEmailed($hasBeenEmailed)
     {
-        if(!$this->hasAssociatedObject && $hasBeenEmailed) {
-            $this->activeForEmail = false;
-        }
         $this->hasBeenEmailed = $hasBeenEmailed;
     }
 
@@ -179,47 +132,6 @@ class NotificationInstance
     public function getHasBeenEmailed()
     {
         return $this->hasBeenEmailed;
-    }
-
-
-    /**
-     * Set activeForDashboard
-     *
-     * @param boolean $activeForDashboard
-     */
-    public function setActiveForDashboard($activeForDashboard)
-    {
-        $this->activeForDashboard = $activeForDashboard;
-    }
-
-    /**
-     * Get activeForDashboard
-     *
-     * @return boolean 
-     */
-    public function getActiveForDashboard()
-    {
-        return $this->activeForDashboard;
-    }
-
-    /**
-     * Set activeForEmail
-     *
-     * @param boolean $activeForEmail
-     */
-    public function setActiveForEmail($activeForEmail)
-    {
-        $this->activeForEmail = $activeForEmail;
-    }
-
-    /**
-     * Get activeForEmail
-     *
-     * @return boolean 
-     */
-    public function getActiveForEmail()
-    {
-        return $this->activeForEmail;
     }
 
     /**
@@ -240,5 +152,25 @@ class NotificationInstance
     public function getHasAssociatedObject()
     {
         return $this->hasAssociatedObject;
+    }
+
+    /**
+     * Set active
+     *
+     * @param boolean $active
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+    }
+
+    /**
+     * Get active
+     *
+     * @return boolean 
+     */
+    public function getActive()
+    {
+        return $this->active;
     }
 }
