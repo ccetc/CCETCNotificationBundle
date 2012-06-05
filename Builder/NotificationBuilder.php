@@ -70,12 +70,11 @@ class NotificationBuilder {
      * @param type $notification
      * @param type $user 
      */
-    public function createNotificationInstance($notification, $user, $hasAssociatedObject = null)
+    public function createNotificationInstance($notification, $user)
     {
         $instance = new \CCETC\NotificationBundle\Entity\NotificationInstance();
         $instance->setUser($user);
         $instance->setNotification($notification);            
-        if(isset($hasAssociatedObject)) $instance->setHasAssociatedObject($hasAssociatedObject);
         $notificationInstanceAdmin = $this->container->get('ccetc.notification.admin.notificationinstance');
         $notificationInstanceAdmin->create($instance);
         

@@ -54,8 +54,10 @@ class UtilityHelper {
 
         foreach($instances as $instance)
         {
-            $instance->setActive(false);
-            $entityManager->persist($instance);
+            if(!$instance->getHasAssociatedObject()) {
+                $instance->setActive(false);
+                $entityManager->persist($instance);
+            }
         }
         
         $entityManager->flush();

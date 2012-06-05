@@ -31,24 +31,24 @@ class NotificationInstance
     protected $notification;
 
     /**
-    * @var smallint $hasBeenEmailed
-    *
-    * @ORM\Column(name="hasBeenEmailed", type="boolean", nullable="true")
-    */
+     * @var boolean $hasBeenEmailed
+     *
+     * @ORM\Column(name="hasBeenEmailed", type="boolean", nullable="true")
+     */
     private $hasBeenEmailed;
 
-   /**
-    * @var smallint $active
-    *
-    * @ORM\Column(name="active", type="boolean", nullable="true")
-    */
+    /**
+     * @var boolean $active
+     *
+     * @ORM\Column(name="active", type="boolean", nullable="true")
+     */
     private $active;
     
-   /**
-    * @var smallint $hasAssociatedObject
-    *
-    * @ORM\Column(name="hasAssociatedObject", type="boolean", nullable="true")
-    */
+    /**
+     * @var boolean $hasAssociatedObject
+     *
+     * @ORM\Column(name="hasAssociatedObject", type="boolean", nullable="true")
+     */
     private $hasAssociatedObject;
     
     
@@ -155,7 +155,9 @@ class NotificationInstance
     }
 
     /**
-     * Set active
+     * Set active.
+     * 
+     * Make sure to only set this within the bundle if instance does not $hasAssociatedObject
      *
      * @param boolean $active
      */
