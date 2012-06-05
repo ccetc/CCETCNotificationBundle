@@ -64,28 +64,6 @@ class Notification
     */
     private $sendEmail;
         
-    /**
-     * The service containing the method to check the dashboard state of the notification
-     * @var string $dashboardStateMethodService
-     *
-     * @ORM\Column(name="dashboardStateMethodService", type="string", length=255, nullable="true")
-     */
-    private $dashboardStateMethodService;
-    /**
-     * The method found in service to check the dashboard state of the instance
-     * @var string $dashboardStateMethod
-     *
-     * @ORM\Column(name="dashboardStateMethod", type="string", length=255, nullable="true")
-     */
-    private $dashboardStateMethod;
-    /**
-     * Array of paramters to send to $dashboardStateMethod
-     * @var string $dashboardStateMethodParameters
-     *
-     * @ORM\Column(name="dashboardStateMethodParameters", type="text", nullable="true")
-     */
-    private $dashboardStateMethodParameters;    
-    
    /** @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="NotificationsCreated")
     *  @ORM\JoinColumn(name="userCreatedBy_id", referencedColumnName="id", onDelete="SET NULL") 
     */
@@ -111,6 +89,19 @@ class Notification
         } else {
             return $this->getDatetimeCreated()->format('M j');
         }
+    }
+    
+    public function getActive()
+    {
+        foreach($this->instances as $instance)
+        {
+            if($instance->getActive())
+            {
+                return true;
+            }
+        }
+        
+        return false;
     }
     
 
@@ -290,63 +281,5 @@ class Notification
         return $this->instances;
     }
 
-    /**
-     * Set dashboardStateMethodService
-     *
-     * @param string $dashboardStateMethodService
-     */
-    public function setDashboardStateMethodService($dashboardStateMethodService)
-    {
-        $this->dashboardStateMethodService = $dashboardStateMethodService;
-    }
-
-    /**
-     * Get dashboardStateMethodService
-     *
-     * @return string 
-     */
-    public function getDashboardStateMethodService()
-    {
-        return $this->dashboardStateMethodService;
-    }
-
-    /**
-     * Set dashboardStateMethod
-     *
-     * @param string $dashboardStateMethod
-     */
-    public function setDashboardStateMethod($dashboardStateMethod)
-    {
-        $this->dashboardStateMethod = $dashboardStateMethod;
-    }
-
-    /**
-     * Get dashboardStateMethod
-     *
-     * @return string 
-     */
-    public function getDashboardStateMethod()
-    {
-        return $this->dashboardStateMethod;
-    }
-
-    /**
-     * Set dashboardStateMethodParameters
-     *
-     * @param text $dashboardStateMethodParameters
-     */
-    public function setDashboardStateMethodParameters($dashboardStateMethodParameters)
-    {
-        $this->dashboardStateMethodParameters = $dashboardStateMethodParameters;
-    }
-
-    /**
-     * Get dashboardStateMethodParameters
-     *
-     * @return text 
-     */
-    public function getDashboardStateMethodParameters()
-    {
-        return $this->dashboardStateMethodParameters;
-    }
+  
 }

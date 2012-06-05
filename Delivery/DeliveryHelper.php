@@ -105,7 +105,11 @@ class DeliveryHelper {
     {
         $doctrine = $this->container->get('doctrine');
         $entityManager = $doctrine->getEntityManager();
-        $stateHelper = $this->container->get('ccetc.notification.state');        
+        
+        if(isset($active)) {
+            if($active) $active = 1;
+            else $active = 0;
+        }
         
         // get all of user's instances
         $query = "
@@ -115,39 +119,29 @@ class DeliveryHelper {
             JOIN     ni.notification n
             WHERE u.id = '".$user->getId()."'";
         
-        if(isset($type) && $type == "email") {
-            $query .= " AND n.sendEmail=1";
-        }
-        if(isset($type) && $type == "dashboard") {
-            $query .= " AND n.showOnDashboard=1";
+        if(isset($type)) {
+            if($type == "email") {
+                $query .= " AND n.sendEmail=1";
+
+                if(isset($active) && $active) {
+                    $query .= " AND ni.activeForEmail=".$active;
+                }
+            } else if($type == "dashboard") {
+                $query .= " AND n.showOnDashboard=1";
+
+                if(isset($active)) {
+                    $query .= " AND ni.activeForDashboard=".$active;
+                }
+            }
+        } else if(isset($active) && $active) {
+            $query .= "AND (ni.activeForDashboard=1 OR vi.activeForEmail=1)";
+        } else if(isset($active) && !$active) {
+            $query .= "AND (ni.activeForDashboard=0 AND vi.activeForEmail=0)";
         }
 
         $query .= " ORDER BY n.datetimeCreated DESC";
-        $instances = $entityManager->createQuery($query)->getResult();
-
-
-        if(isset($active)) {
-            if(isset($type) && $type == "dashboard") {
-                $stateMethod = "instanceIsActiveForDashboard";
-            } else if(isset($type) && $type == "email") {
-                $stateMethod = "instanceIsActiveForEmail";
-            } else {
-                $stateMethod = "instanceIsActive";
-            }
-
-            $instancesToReturn = array();            
-            
-            foreach($instances as $instance)
-            {
-                if(($active && $stateHelper->$stateMethod($instance)) || (!$active && !$stateHelper->$stateMethod($instance))) {
-                    $instancesToReturn[] = $instance;
-                }
-            }
-
-            return $instancesToReturn;
-        } else {
-            return $instances;
-        }
+        
+        return $entityManager->createQuery($query)->getResult();
     }
 
     

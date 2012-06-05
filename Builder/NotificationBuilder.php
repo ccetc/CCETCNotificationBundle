@@ -38,24 +38,31 @@ class NotificationBuilder {
             $method = 'set'.ucfirst($field);
             $notification->$method($value);
         }
-        
+                
         $notificationAdmin = $this->container->get('ccetc.notification.admin.notification');        	    
         $notificationAdmin->create($notification);
+
+        if(isset($options['hasAssociatedObject'])) {
+            $hasAssociatedObject = $options['hasAssociatedObject'];
+        } else {
+            $hasAssociatedObject = false;
+        }
         
         if(isset($options['users'])) {
             if(is_array($options['users'])) {
                 foreach($users as $user)
                 {
-                    $this->createNotificationInstance($notification, $user);
+                    $this->createNotificationInstance($notification, $user, $hasAssociatedObject);
                 }
             } else {
-                $this->createNotificationInstance($notification, $options['users']);
+                $this->createNotificationInstance($notification, $options['users'], $hasAssociatedObject);
             }
         }
         if(isset($options['user'])) {
-            $this->createNotificationInstance($notification, $options['user']);
+            $this->createNotificationInstance($notification, $options['user'], $hasAssociatedObject);
         }
 
+        return $notification;
     }
     
     /**
@@ -63,13 +70,16 @@ class NotificationBuilder {
      * @param type $notification
      * @param type $user 
      */
-    public function createNotificationInstance($notification, $user)
+    public function createNotificationInstance($notification, $user, $hasAssociatedObject = null)
     {
         $instance = new \CCETC\NotificationBundle\Entity\NotificationInstance();
         $instance->setUser($user);
         $instance->setNotification($notification);            
+        if(isset($hasAssociatedObject)) $instance->setHasAssociatedObject($hasAssociatedObject);
         $notificationInstanceAdmin = $this->container->get('ccetc.notification.admin.notificationinstance');
         $notificationInstanceAdmin->create($instance);
+        
+        return $instance;
     }
     
 }

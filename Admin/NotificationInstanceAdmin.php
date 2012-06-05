@@ -61,5 +61,5 @@ class NotificationInstanceAdmin extends Admin
                 ->add('hasBeenEmailed')		
                 ->add('hasBeenShownOnDashboard')		
 		;
-    }
+    }    
 }

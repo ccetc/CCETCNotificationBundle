@@ -1,10 +1,12 @@
 <div class="ccetc-item-container {{ active is defined and active ? 'active' : '' }} {{ last is defined and last ? 'last' : '' }}">
     <div class="ccetc-item ccetc-icon-item">
-        <div class="short-message">
-            <i class="{{ notification.class ? notification.class : 'icon-globe green' }}"></i>
-            {{ notification.shortMessage|raw }}
+        <div class="ccetc-main-content-container">
+            <div class="short-message">
+                <i class="{{ notification.class ? notification.class : 'icon-globe green' }}"></i>
+                {{ notification.shortMessage|raw }}
+            </div>
+            <div class="date">{{ notification.dateCreatedNice }}</div>
         </div>
-        <div class="date">{{ notification.dateCreatedNice }}</div>
         {% if notification.longMessage and notification.longMessage != ""  %}
             <div class="long-message">
                 {{ notification.longMessage|raw }}

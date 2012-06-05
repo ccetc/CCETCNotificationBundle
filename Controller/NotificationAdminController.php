@@ -141,6 +141,7 @@ class NotificationAdminController extends Controller
                     $existingUsers[] = $instance->getUser()->getId();
                                         
                     if(!in_array($instance->getUser()->getId(), $form['users']->getData())) {
+                        $object->getInstances()->removeElement($instance);
                         $notificationInstanceAdmin->delete($instance);
                     }
                 }

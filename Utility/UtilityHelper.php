@@ -25,7 +25,6 @@ class UtilityHelper {
         $notificationRepository = $this->container->get('doctrine')->getRepository('CCETCNotificationBundle:Notification');
         $notifications = $notificationRepository->findAll();
         $entityManager = $this->container->get('doctrine')->getEntityManager();
-        $stateHelper = $this->container->get('ccetc.notification.state');
         
         $notificationsRemoved = 0;
         
@@ -33,7 +32,7 @@ class UtilityHelper {
         {
             $interval = $notification->getDatetimeCreated()->diff(new \DateTime());
             $daysOld = (int) $interval->format('%a');
-            if(!$stateHelper->notificationIsActive($notification) && $daysOld > 30) {
+            if(!$notification->getActive() && $daysOld > 30) {
                 $entityManager->remove($notification);
                 $notificationsRemoved++;
             }

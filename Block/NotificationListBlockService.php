@@ -51,7 +51,7 @@ class NotificationListBlockService extends BaseBlockService
         
         $newNotificationInstances = $deliveryHelper->findInstancesByUser($user, true, "dashboard");
         $oldNotificationInstances = $deliveryHelper->findInstancesByUser($user, false, "dashboard");
-
+        
         if(count($oldNotificationInstances) > 0) {
             $hasOldNotifications = true;
         } else {
