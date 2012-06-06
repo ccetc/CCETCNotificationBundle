@@ -76,7 +76,7 @@ Notifications are primarily shown on the dashboard.  Once they are shown they ar
 	- longMessage - displayed in small text on dashboard, and in email body (optional)
 	- class - fontello font icon class given (optional)
 		- set up to use 'icon-globe green', 'icon-attention red', 'icon-bell orange', 'icon-info-circle lightBlue'
-	- type - task|notification (default: notification)
+	- type - 'task' or 'notification' (default: notification)
 	- dateTaskDue - optional
 - users
 	- Array of users the notification is for (also takes a single user)
