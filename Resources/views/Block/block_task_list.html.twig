@@ -26,7 +26,7 @@ file that was distributed with this source code.
         {% include 'CCETCNotificationBundle:Notification:_notification_list.html.twig' with {'instances' : tasks, 'active' : false, 'noNotificationText' : 'No Tasks' } %}
         <div class="ccetc-item-container first">
             <div class="ccetc-item ccetc-meta-item">
-                <a href="{{ notificationAdmin.generateUrl('myNotifications') }}">view all tasks</a>
+                <a href="{{ notificationAdmin.generateUrl('myTasks') }}">view all tasks</a>
             </div>
         </div>
    </div>
