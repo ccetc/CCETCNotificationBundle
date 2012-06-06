@@ -6,6 +6,10 @@
                 <source>action_myNotifications</source>
                 <target>My Notifications</target>
             </trans-unit>
+            <trans-unit id="action_myTasks">
+                <source>action_myTasks</source>
+                <target>My Tasks</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

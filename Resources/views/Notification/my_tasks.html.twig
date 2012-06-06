@@ -1,0 +1,20 @@
+{% extends base_template %}
+
+{% block title %}
+    My Tasks
+{% endblock %}
+    
+{% block content %}
+    {% include 'CCETCNotificationBundle:Notification:_menu.html.twig' with {'admin' : admin, 'action' : action } %}
+          
+    <div class="ccetc-widget-container span10">
+        {% include 'CCETCNotificationBundle:Notification:_notification_list.html.twig' with {'instances' : instances, 'active' : false } %}
+        {% if instances|length == 0 %}
+            <div class="ccetc-item-container">
+                <div class="ccetc-item ccetc-meta-item">
+                    No Tasks
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

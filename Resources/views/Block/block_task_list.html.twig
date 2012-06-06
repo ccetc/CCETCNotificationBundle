@@ -1,0 +1,33 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+
+{% extends 'SonataBlockBundle:Block:block_base.html.twig' %}
+
+{% block block %}
+    <div class="ccetc-widget-container">
+        <div class="ccetc-widget-heading">
+            <h3><i class="icon-check" style="font-weight: normal;"></i> Tasks
+            {% if activeTaskCount > 0 %}
+                <span class="item-count">
+                    {{ activeTaskCount|length }}
+                </span>
+                &nbsp;
+            {% endif %}
+            </h3>
+        </div>
+        {% include 'CCETCNotificationBundle:Notification:_notification_list.html.twig' with {'instances' : tasks, 'active' : false, 'noNotificationText' : 'No Tasks' } %}
+        <div class="ccetc-item-container first">
+            <div class="ccetc-item ccetc-meta-item">
+                <a href="{{ notificationAdmin.generateUrl('myNotifications') }}">view all tasks</a>
+            </div>
+        </div>
+   </div>
+{% endblock %}

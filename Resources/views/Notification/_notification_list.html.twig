@@ -1,5 +1,5 @@
 {% for instance in instances %}
-    {% include 'CCETCNotificationBundle:Notification:_notification.html.twig' with {'notification' : instance.notification, 'active' : active } %}
+    {% include 'CCETCNotificationBundle:Notification:_notification.html.twig' with {'notification' : instance.notification, 'instance' : instance, 'first' : loop.first, 'last' : loop.last } %}
 {% endfor %}
 {% if instances|length == 0 %}
     <div class="ccetc-item-container">

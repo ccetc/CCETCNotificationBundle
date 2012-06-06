@@ -1,5 +1,6 @@
 <ul class="pills">
     <li class="{{ action == "myNotifications" ? 'active' : '' }}"><a href="{{ admin.generateUrl('myNotifications') }}">My Notifications</a></li>
+    <li class="{{ action == "myTasks" ? 'active' : '' }}"><a href="{{ admin.generateUrl('myTasks') }}">My Tasks</a></li>
     <li class="{{ action == "list" ? 'active' : '' }}"><a href="{{ admin.generateUrl('list') }}">Sent Notifications</a></li>
     <li class="{{ action == "create" or action == "edit" ? 'active' : '' }}"><a href="{{ admin.generateUrl('create') }}">Notify {% trans from 'SonataUserBundle' %}users{% endtrans %}</a></li>
 </ul>

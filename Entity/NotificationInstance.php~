@@ -155,15 +155,15 @@ class NotificationInstance
     }
 
     /**
-     * Set active
+     * Set active.
+     * 
+     * Make sure to only set this within the bundle if instance does not $hasAssociatedObject
      *
      * @param boolean $active
      */
     public function setActive($active)
     {
-        if(!$this->hasAssociatedObject) {
-            $this->active = $active;
-        }
+        $this->active = $active;
     }
 
     /**

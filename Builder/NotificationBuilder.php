@@ -42,12 +42,6 @@ class NotificationBuilder {
         $notificationAdmin = $this->container->get('ccetc.notification.admin.notification');        	    
         $notificationAdmin->create($notification);
 
-        if(isset($options['hasAssociatedObject'])) {
-            $hasAssociatedObject = $options['hasAssociatedObject'];
-        } else {
-            $hasAssociatedObject = false;
-        }
-        
         if(isset($options['users'])) {
             if(is_array($options['users'])) {
                 foreach($users as $user)

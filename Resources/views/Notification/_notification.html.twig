@@ -1,11 +1,19 @@
-<div class="ccetc-item-container {{ active is defined and active ? 'active' : '' }} {{ last is defined and last ? 'last' : '' }}">
-    <div class="ccetc-item ccetc-icon-item">
+<div class="ccetc-item-container {{ notification.priority is defined and instance is defined and instance.active ? notification.priority ~ '-priority' : '' }} {{ first is defined and first ? 'first' : '' }} {{ last is defined and last ? 'last' : '' }}">
+    <div class="ccetc-item ccetc-icon-item {{ notification.type }} {{ instance is defined and instance.active ? 'active' : 'inactive' }}">
         <div class="ccetc-main-content-container">
             <div class="short-message">
-                <i class="{{ notification.class ? notification.class : 'icon-globe green' }}"></i>
+                {% if notification.type == "task" and instance is defined and not instance.active %}
+                    <i class="icon-check"></i>
+                {% else %}
+                    <i class="{{ notification.class ? notification.class : 'icon-globe green' }}"></i>
+                {% endif %}
                 {{ notification.shortMessage|raw }}
             </div>
-            <div class="date">{{ notification.dateTimeCreatedNice }}</div>
+            {% if notification.type == "task" %}    
+                {% if notification.dateTaskDue and instance is defined and instance.active %}<div class="date">{{ notification.dateTaskDueNice }}</div>{% endif %}                
+            {% else %}
+                <div class="date">{{ notification.dateTimeCreatedNice }}</div>
+            {% endif%}
         </div>
         {% if notification.longMessage and notification.longMessage != ""  %}
             <div class="long-message">

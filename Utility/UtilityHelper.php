@@ -63,5 +63,18 @@ class UtilityHelper {
         $entityManager->flush();
     }
     
+    public function splitInstancesByType($instances) {
+        $result = array();
+        foreach($instances as $instance)
+        {
+            if(!isset($result[$instance->getNotification()->getType()])) {
+                $result[$instance->getNotification()->getType()] = array();
+            }
+            
+            $result[$instance->getNotification()->getType()][] = $instance;
+        }
+        
+        return $result;
+    }
     
 }

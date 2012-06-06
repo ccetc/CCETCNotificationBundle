@@ -20,7 +20,7 @@ use Sonata\AdminBundle\Validator\ErrorElement;
 use Sonata\BlockBundle\Model\BlockInterface;
 use Sonata\BlockBundle\Block\BaseBlockService;
 
-class NotificationListBlockService extends BaseBlockService
+class TaskListBlockService extends BaseBlockService
 {
     protected $container;
     
@@ -44,28 +44,23 @@ class NotificationListBlockService extends BaseBlockService
         $entityManager = $this->container->get('doctrine')->getEntityManager();
         $settings = array_merge($this->getDefaultSettings(), $block->getSettings());
         $user = $this->container->get('security.context')->getToken()->getUser();
+       
+        $entityManager = $this->container->get('doctrine')->getEntityManager();
+        $settings = array_merge($this->getDefaultSettings(), $block->getSettings());
+        $user = $this->container->get('security.context')->getToken()->getUser();
         $deliveryHelper = $this->container->get('ccetc.notification.delivery');
         $utilityHelper = $this->container->get('ccetc.notification.utility');
         $notificationAdmin = $this->container->get('ccetc.notification.admin.notification');
-                
         
-        $newNotificationInstances = $deliveryHelper->findInstancesByUser($user, true, null, 'notification');
-        $oldNotificationInstances = $deliveryHelper->findInstancesByUser($user, false, null, 'notification');
+        $tasks = $deliveryHelper->findInstancesByUser($user, true, null, 'task');
+        $activeTaskCount = $deliveryHelper->getActiveTaskCountByUser($user);
         
-        if(count($oldNotificationInstances) > 0) {
-            $hasOldNotifications = true;
-        } else {
-            $hasOldNotifications = false;
-        }
-        
-       // $utilityHelper->batchSetInactive($newNotificationInstances);
-        
-        return $this->renderResponse('CCETCNotificationBundle:Block:block_notification_list.html.twig', array(
+        return $this->renderResponse('CCETCNotificationBundle:Block:block_task_list.html.twig', array(
             'block'     => $block,
             'settings'  => $settings,
-            'newNotifications' => $newNotificationInstances,
-            'hasOldNotifications' => $hasOldNotifications,
-            'notificationAdmin' => $notificationAdmin
+            'tasks' => $tasks,
+            'activeTaskCount' => $activeTaskCount,
+            'notificationAdmin' => $notificationAdmin            
         ), $response);
     }
 
@@ -90,7 +85,7 @@ class NotificationListBlockService extends BaseBlockService
      */
     public function getName()
     {
-        return 'Notification List';
+        return 'Tasks';
     }
 
     /**

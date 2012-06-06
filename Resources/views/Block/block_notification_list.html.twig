@@ -14,7 +14,7 @@ file that was distributed with this source code.
 {% block block %}
     <div class="ccetc-widget-container">
         <div class="ccetc-widget-heading">
-            <h3>Notifications
+            <h3><i class="icon-signal" style="font-weight: normal;"></i> Notifications
             {% if newNotifications|length > 0 %}
                 <span class="item-count">
                     {{ newNotifications|length }}
@@ -23,9 +23,9 @@ file that was distributed with this source code.
             {% endif %}
             </h3>
         </div>
-        {% include 'CCETCNotificationBundle:Notification:_notification_list.html.twig' with {'instances' : newNotifications, 'active' : false, 'noNotificationText' : 'No New Notifications' } %}
+        {% include 'CCETCNotificationBundle:Notification:_notification_list.html.twig' with {'instances' : newNotifications, 'noNotificationText' : 'No New Notifications' } %}
         {% if hasOldNotifications %}
-            <div class="ccetc-item-container">
+            <div class="ccetc-item-container first">
                 <div class="ccetc-item ccetc-meta-item">
                     <a href="{{ notificationAdmin.generateUrl('myNotifications') }}">view all notifications</a>
                 </div>

@@ -10,8 +10,21 @@
 }
 
 .ccetc-item-container .date {
-    color: #ccc;
+    color: #666;
     float: right;
     font-size: 12px;
     margin-top: 5px;
+}
+
+.ccetc-item.task.inactive .short-message {
+    text-decoration: line-through;
+    opacity: .6;
+}
+.ccetc-item-container.high-priority {
+    background-color: #F2DEDE;
+    border-color: #EED3D7;
+}
+.ccetc-item-container.medium-priority {
+    background-color: #FCF8E3;
+    border-color: #FBEED5;
 }

@@ -49,6 +49,20 @@ class Notification
      * @ORM\Column(name="class", type="string", length=255, nullable="true")
      */
     private $class;    
+
+    /**
+     * @var string $type
+     *
+     * @ORM\Column(name="type", type="string", length=255, nullable="true")
+     */
+    private $type; 
+        
+    /**
+     * @var date $dateTaskDue
+     *
+     * @ORM\Column(name="dateTaskDue", type="date", nullable="true")
+     */
+    private $dateTaskDue;    
     
    /** @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="NotificationsCreated")
     *  @ORM\JoinColumn(name="userCreatedBy_id", referencedColumnName="id", onDelete="SET NULL") 
@@ -73,7 +87,37 @@ class Notification
         } else if($date == date('d/m/Y', time() - (24 * 60 * 60))) {
             return 'Yesterday - '.$this->getDatetimeCreated()->format('g:ia');
         } else {
-            return $this->getDatetimeCreated()->format('M j');
+            return $this->getDatetimeCreated()->format('F j');
+        }
+    }
+    
+    public function getDateTaskDueNice()
+    {
+        if($this->getDateTaskDue()) {
+           $date = $this->getDateTaskDue()->format('d/m/Y');
+           
+            if($date == date('d/m/Y')) {
+                return 'Due Today';
+            } else if($date == date('d/m/Y', time() + (24 * 60 * 60))) {
+                return 'Due Tomorrow';
+            } else if($this->getDateTaskDue() < new \DateTime()) {
+                return 'Overdue!';
+            } else {
+                return $this->getDateTaskDue()->format('F j');
+            }
+        }
+    }
+    
+    public function getPriority()
+    {
+        switch($this->getDateTaskDueNice()) {
+            case "Due Today":
+            case "Overdue!":
+                return "high";
+            case "Due Tomorrow":
+                return "medium";
+            default:
+                return 'normal';
         }
     }
     
@@ -88,6 +132,13 @@ class Notification
         }
         
         return false;
+    }
+    
+    public function __construct()
+    {
+        $this->instances = new \Doctrine\Common\Collections\ArrayCollection();
+
+        if(!$this->getType()) $this->setType('notification');
     }
     
 
@@ -200,11 +251,7 @@ class Notification
     {
         return $this->userCreatedBy;
     }
-    public function __construct()
-    {
-        $this->instances = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
+
     /**
      * Add instances
      *
@@ -226,4 +273,44 @@ class Notification
     }
 
   
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string 
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set dateTaskDue
+     *
+     * @param date $dateTaskDue
+     */
+    public function setDateTaskDue($dateTaskDue)
+    {
+        $this->dateTaskDue = $dateTaskDue;
+    }
+
+    /**
+     * Get dateTaskDue
+     *
+     * @return date 
+     */
+    public function getDateTaskDue()
+    {
+        return $this->dateTaskDue;
+    }
 }
