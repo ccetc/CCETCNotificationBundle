@@ -6,9 +6,14 @@ Provides tools to generating, storing, and delivery application notificatons via
 This bundle is developed alongside our own forks of SonataAdminBundle, SonataUserBundle, FOSUserBundle, and SonataDoctrineORMAdminBundle.  It has not been testing with the original versions of those bundles.  It is a work in progress and has not yet been used in production.
 
 ## Features
-- Admin Interface for managing Notifications
-- SonataAdmin Dashboard Block
-- email notifications
+- two types of messages: notifications & tasks
+- tasks are actionable items
+- notifications and just notifications
+- SonataAdmin Dashboard Block for notifications
+- SonataAdmin Dashboard Block for tasks
+- email digest for all types of notifications
+- "My Notifications" and "My Tasks" pages
+
 
 ## Installation
 To install as a Symfony vendor, add the following lines to the file ``deps``:
@@ -71,6 +76,8 @@ Notifications are primarily shown on the dashboard.  Once they are shown they ar
 	- longMessage - displayed in small text on dashboard, and in email body (optional)
 	- class - fontello font icon class given (optional)
 		- set up to use 'icon-globe green', 'icon-attention red', 'icon-bell orange', 'icon-info-circle lightBlue'
+	- type - task|notification (default: notification)
+	- dateTaskDue - optional
 - users
 	- Array of users the notification is for (also takes a single user)
 	
