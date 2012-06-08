@@ -12,20 +12,13 @@ use Sonata\AdminBundle\Route\RouteCollection;
 
 class NotificationAdmin extends Admin
 {    
-    protected $entityIconPath = 'icon-globe';
+    protected $entityIconPath = 'icon-signal';
     
     public function configureRoutes(RouteCollection $collection)
     {
         $collection->add('myNotifications', 'my-notifications');
-        $collection->add('notifyStaff', 'notify-staff');
+        $collection->add('myTasks', 'my-tasks');
     }
-    
-    public $listPreHook = array(
-        'template' => 'CCETCNotificationBundle:Notification:_menu.html.twig'
-    );
-    public $formPreHook = array(
-        'template' => 'CCETCNotificationBundle:Notification:_menu.html.twig'
-    );
     
     public $userAdmin;
     
@@ -35,12 +28,28 @@ class NotificationAdmin extends Admin
         $this->userAdmin = $this->getConfigurationPool()->getContainer()->get('sonata.user.admin.user');
     }
     
+    public function getActionMenuItems($action, $object = null)
+    {
+        $items = parent::getActionMenuItems($action, $object);
+        
+        unset($items['list']);
+        $items['myNotifications'] = array(
+            'label' => 'My Notifications',
+            'icon' => 'icon-signal',
+            'href' => $this->generateUrl('myNotifications')
+        );
+        
+        if($action == 'myNotifications') $items['myNotifications']['class'] = 'active';
+        
+        return $items;
+    }
+    
     protected function configureListFields(ListMapper $listMapper)
     {
         
         $listMapper
                 ->add('shortMessage', null, array('label' => 'Notification','template' => 'CCETCNotificationBundle:Notification:_list_notification.html.twig'))
-                ->add('instances', null, array('label' => $this->trans('users', array(), 'SonataUserBundle').' sent to','template' => 'CCETCNotificationBundle:Notification:_list_staff.html.twig'))
+                ->add('instances', null, array('label' => $this->trans('users', array(), 'SonataUserBundle').' sent to','template' => 'CCETCNotificationBundle:Notification:_list_users.html.twig'))                
                 ->add('_action', 'actions', array(
                     'actions' => array(
                         'view' => array(),
@@ -79,7 +88,7 @@ class NotificationAdmin extends Admin
         
         $formMapper
                 ->add('shortMessage')		
-                ->add('longMessage', null, array('label' => 'Long Message (optional)'))		
+                ->add('longMessage', null, array('label' => 'Long Message (optional)', 'attr' => array('class' => 'tinymce'), 'required' => false))	
                 ->add('users', 'choice', array(
                     'label' => $this->trans('users', array(), 'SonataUserBundle').' to send to',
                     'property_path' => false,
@@ -100,7 +109,7 @@ class NotificationAdmin extends Admin
     {
         $showMapper
                 ->add('shortMessage')		
-                ->add('longMessage')		
+                ->add('longMessage', null, array('template' => 'CCETCNotificationBundle:Notification:_show_long_message.html.twig'))
                 ->add('datetimeCreated')		
                 ->add('instances', null, array('label' => $this->trans('users', array(), 'SonataUserBundle').' sent to','template' => 'CCETCNotificationBundle:Notification:_show_users.html.twig'))                
 		;

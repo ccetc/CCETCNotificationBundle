@@ -4,9 +4,7 @@
     My Tasks
 {% endblock %}
     
-{% block content %}
-    {% include 'CCETCNotificationBundle:Notification:_menu.html.twig' with {'admin' : admin, 'action' : action } %}
-          
+{% block content %}          
     <div class="ccetc-widget-container span10">
         {% include 'CCETCNotificationBundle:Notification:_notification_list.html.twig' with {'instances' : instances, 'active' : false } %}
         {% if instances|length == 0 %}

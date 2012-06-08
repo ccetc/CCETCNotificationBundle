@@ -16,6 +16,8 @@ class NotificationInstanceAdmin extends Admin
     
     protected $entityLabelPlural = "Instances";
     
+    public $entityHeading = "Notifications";
+    
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
