@@ -149,7 +149,9 @@ class DeliveryHelper {
     }
     
     /**
-     * For each task, set each instance to needsToBeEmailed if it is active, and today is one of the taskReminderDays from the dateDue
+     * For each task,
+     * set each instance to needsToBeEmailed
+     * if it is active, and today is one of the taskReminderDays from the dateDue
      */
     public function updateTaskReminders()
     {
@@ -162,7 +164,7 @@ class DeliveryHelper {
         
         foreach($notifications as $notification)
         {
-            if($notification->getActive() && $notification->getTaskReminderDays()) {        
+            if($notification->getActive() && $notification->getTaskReminderDays() && $notification->getDateTaskDue()) {        
                 $reminderDays = explode(',', $notification->getTaskReminderDays());
                 foreach($reminderDays as $day) {
                     $dateToCheckFor = date('Y-m-d', time() + ($day * 24 * 60 * 60));
