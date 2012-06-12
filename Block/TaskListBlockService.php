@@ -60,7 +60,7 @@ class TaskListBlockService extends BaseBlockService
             'block'     => $block,
             'settings'  => $settings,
             'tasks' => $tasks,
-            'activeTaskCount' => $activeTaskCount,
+            'activeTaskCount' => $activeTaskCount[0][1],
             'notificationAdmin' => $notificationAdmin,
             'taskAdmin' => $taskAdmin
         ), $response);
