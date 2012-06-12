@@ -1,0 +1,39 @@
+<html>
+
+    You have {{ totals }}:
+    <br/><br/>
+
+    {% for type, typeInstances in instances %}
+        {% if instances|length > 1 %} <b>{{ type|capitalize }}s</b><br/><br/>{% endif %}
+        
+        <div style="width: 600px; margin: 0 auto; border: 1px solid #ddd; border-bottom: none;">
+
+            {% for instance in typeInstances %}
+                {% set notification = instance.notification %}
+
+                <div style="border-bottom: 1px solid #ddd; padding: 6px 8px; overflow: auto;">
+                    <div style="overflow: auto;">
+                        <div style="float: left; font-weight: bold;">
+                            {{ notification.shortMessage }}
+                        </div>
+
+                        {% if notification.type == "task" %}
+                            <div style="float: right; color: #666;">{{ notification.dateTaskDueNice }}</div>              
+                        {% else %}
+                            <div style="float: right; color: #666;">{{ notification.dateTimeCreatedNice }}</div>
+                        {% endif %}
+                    </div>
+
+                    {% if notification.longMessage %} <div style="float: left;">{{ notification.longMessage|raw }}</div> {% endif %}
+                </div>
+            {% endfor %}
+
+        </div>
+    {% endfor %}
+
+
+    <div style="color: #666; margin-top: 30px;">
+        Control how often you receive notification emails on your <a href="{{ profileHref }}">Profile Page</a>
+    </div>
+
+</html>

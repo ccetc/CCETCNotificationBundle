@@ -31,11 +31,11 @@ class NotificationInstance
     protected $notification;
 
     /**
-     * @var boolean $hasBeenEmailed
+     * @var boolean $needsToBeEmailed
      *
-     * @ORM\Column(name="hasBeenEmailed", type="boolean", nullable="true")
+     * @ORM\Column(name="needsToBeEmailed", type="boolean", nullable="true")
      */
-    private $hasBeenEmailed;
+    private $needsToBeEmailed;
 
     /**
      * @var boolean $active
@@ -60,7 +60,7 @@ class NotificationInstance
     
     public function __construct()
     {
-        if(!isset($this->hasBeenEmailed)) $this->hasBeenEmailed = false;
+        if(!isset($this->needsToBeEmailed)) $this->needsToBeEmailed = false;
         if(!isset($this->active)) $this->active = true;
     }
     
@@ -115,26 +115,6 @@ class NotificationInstance
     }
 
     /**
-     * Set hasBeenEmailed
-     *
-     * @param boolean $hasBeenEmailed
-     */
-    public function setHasBeenEmailed($hasBeenEmailed)
-    {
-        $this->hasBeenEmailed = $hasBeenEmailed;
-    }
-
-    /**
-     * Get hasBeenEmailed
-     *
-     * @return boolean 
-     */
-    public function getHasBeenEmailed()
-    {
-        return $this->hasBeenEmailed;
-    }
-
-    /**
      * Set hasAssociatedObject
      *
      * @param boolean $hasAssociatedObject
@@ -174,5 +154,25 @@ class NotificationInstance
     public function getActive()
     {
         return $this->active;
+    }
+
+    /**
+     * Set needsToBeEmailed
+     *
+     * @param boolean $needsToBeEmailed
+     */
+    public function setNeedsToBeEmailed($needsToBeEmailed)
+    {
+        $this->needsToBeEmailed = $needsToBeEmailed;
+    }
+
+    /**
+     * Get needsToBeEmailed
+     *
+     * @return boolean 
+     */
+    public function getNeedsToBeEmailed()
+    {
+        return $this->needsToBeEmailed;
     }
 }

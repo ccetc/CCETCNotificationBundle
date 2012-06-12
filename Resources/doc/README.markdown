@@ -3,15 +3,17 @@
 Provides tools to generating, storing, and delivery application notificatons via e-mail and a "dashboard".
 
 ## Note
-This bundle is developed alongside our own forks of SonataAdminBundle, SonataUserBundle, FOSUserBundle, and SonataDoctrineORMAdminBundle.  It has not been testing with the original versions of those bundles.  It is a work in progress and has not yet been used in production.
+* **This bundle is a work in progress and has not yet been used in production. **
+* This bundle is developed alongside our own forks of SonataAdminBundle, SonataUserBundle, FOSUserBundle, and SonataDoctrineORMAdminBundle.  It has not been testing with the original versions of those bundles.
 
 ## Features
 - two types of messages: notifications & tasks
 - tasks are actionable items
-- notifications and just notifications
+- notifications are just notifications
 - SonataAdmin Dashboard Block for notifications
 - SonataAdmin Dashboard Block for tasks
 - email digest for all types of notifications
+- configurable email reminders for tasks
 - "My Notifications" and "My Tasks" pages
 
 
@@ -51,10 +53,11 @@ Add block to Sonata Dashboard:
 
 Create cronjobs to run the cleanup and email commands:
 
-	php app/console ccetc:notification:sendemails instantly
-	php app/console ccetc:notification:sendemails hourly
-	php app/console ccetc:notification:sendemails daily
-	php app/console ccetc:notification:cleanup
+	every minute: php app/console ccetc:notification:sendemails instantly
+	every hour: php app/console ccetc:notification:sendemails hourly
+	every day: php app/console ccetc:notification:sendemails daily
+	every day: php app/console ccetc:notification:cleanup
+	every day: php app/console ccetc:notification:updatereminders
 
 
 ## Use
@@ -78,6 +81,7 @@ Notifications are primarily shown on the dashboard.  Once they are shown they ar
 		- set up to use 'icon-globe green', 'icon-attention red', 'icon-bell orange', 'icon-info-circle lightBlue'
 	- type - 'task' or 'notification' (default: notification)
 	- dateTaskDue - optional
+        - taskReminderDays - optional, comma separated list of integers, tasks will be re-emailed in the digest x,y,z days before the task is due
 - users
 	- Array of users the notification is for (also takes a single user)
 	

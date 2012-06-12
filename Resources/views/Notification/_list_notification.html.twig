@@ -2,6 +2,6 @@
 
 {% block field%}
     <div style="width: 600px;">
-    {% include 'CCETCNotificationBundle:Notification:_notification.html.twig' with {'notification' : object, 'active' : false, 'last' : true } %}
+    {% include 'CCETCNotificationBundle:Notification:_notification.html.twig' with {'notification' : object, 'active' : false, 'last' : true, 'showLongMessage' : false } %}
     </div>
 {% endblock %}

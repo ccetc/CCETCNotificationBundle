@@ -22,19 +22,6 @@ class NotificationAdminController extends Controller
                     'action' => 'myNotifications'
                 ));
     }
-    public function myTasksAction()
-    {
-        $deliveryHelper = $this->container->get('ccetc.notification.delivery');
-        $user = $this->container->get('security.context')->getToken()->getUser();
-
-        $instances = $deliveryHelper->findInstancesByUser($user, null, null, 'task');
-
-        return $this->render('CCETCNotificationBundle:Notification:my_tasks.html.twig', array(
-                    'instances' => $instances,
-                    'action' => 'myTasks'
-                ));
-    }
-
     public function createAction()
     {
         if(false === $this->admin->isGranted('CREATE')) {

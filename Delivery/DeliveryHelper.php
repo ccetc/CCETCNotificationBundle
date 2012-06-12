@@ -35,7 +35,7 @@ class DeliveryHelper {
         
         foreach($users as $user)
         {
-            $instancesToEmail = $this->findInstancesByUser($user, true, false);
+            $instancesToEmail = $this->findInstancesByUser($user, true, true);
 
             if($instancesToEmail) {
                 $this->sendNotificationDigestEmail($user, $instancesToEmail);
@@ -43,7 +43,7 @@ class DeliveryHelper {
             
                 foreach($instancesToEmail as $instance)
                 {
-                    $instance->setHasBeenEmailed(true);
+                    $instance->setNeedsToBeEmailed(false);
                     $notificationInstanceAdmin->update($instance);
                 }            
             }
@@ -67,10 +67,6 @@ class DeliveryHelper {
         
         $instances = $utilityHelper->splitInstancesByType($instances);
         
-        $body = '<html>';
-
-        $body .= "You have ";
-        
         $totals = "";
         
         foreach($instances as $type => $typeInstances) {
@@ -78,43 +74,16 @@ class DeliveryHelper {
             else $noun = $type.'s';
             
             if($totals != "") $totals .= " and ";
-            $totals .= count($typeInstances).' new '.$noun;
+            $totals .= count($typeInstances).' '.$noun;
         }
-        
-        $body .= $totals;
-            
-        $body .= ':<br/><br/>';
-            
-        foreach($instances as $type => $typeInstances) {
-            if(count($instances) > 1) $body .= '<b>'.ucfirst($type).'s</b><br/><br/>';
-            $body .= '<div style="width: 600px; margin: 0 auto; border: 1px solid #ddd;">';
-            
-            
-            foreach($typeInstances as $instance)
-            {
-                $notification = $instance->getNotification();
-
-                $body .= '<div style="border-bottom: 1px solid #ddd; padding: 6px 8px; overflow: auto;">';
-                $body .= '<div style="overflow: auto;"><div style="float: left; font-weight: bold;">'.$notification->getShortMessage().'</div>';
-                
-                if($notification->getType() == "task") {
-                    $body .= '<div style="float: right; color: #666;">'.$notification->getDateTaskDueNice().'</div></div>';                    
-                } else {
-                    $body .= '<div style="float: right; color: #666;">'.$notification->getDateTimeCreatedNice().'</div></div>';
-                }
-                
-                if($notification->getLongMessage()) $body .= '<div style="float: left;">'.$notification->getLongMessage().'</div>';
-                $body .= '</div>';
-            }
-
-            $body .= '</div><br/><br/>';
-        }
-        
-        
-        $body .= '<span style="color: #666;">Control how often you receive notification emails on your <a href="'.$this->getContainer()->getParameter('my_cce_app.server_address').$this->getContainer()->get('router')->generate('fos_user_profile_show').'">Profile Page</a></span>';
-        
+ 
+        $body = $this->container->get('twig')->render('CCETCNotificationBundle:Email:digest.html.twig', array(
+            'totals' => $totals,
+            'instances' => $instances,
+            'profileHref' => $this->getContainer()->getParameter('my_cce_app.server_address').$this->getContainer()->get('router')->generate('fos_user_profile_show')
+        ));        
         $message = \Swift_Message::newInstance()
-                ->setSubject($applicationTitle.' - Notification Digest')
+                ->setSubject($applicationTitle.' - Notification & Task Digest')
                 ->setFrom($fromEmail)
                 ->setTo($user->getEmail())
                 ->setContentType('text/html')
@@ -131,7 +100,7 @@ class DeliveryHelper {
      * @param bool $active only include inactive or active instances
      * @return type 
      */
-    public function findInstancesByUser($user, $active = null, $hasBeenEmailed = null, $type = null)
+    public function findInstancesByUser($user, $active = null, $needsToBeEmailed = null, $type = null)
     {
         $doctrine = $this->container->get('doctrine');
         $entityManager = $doctrine->getEntityManager();
@@ -149,10 +118,10 @@ class DeliveryHelper {
             else $active = 0;
             $query .= " AND ni.active=".$active;
         }
-        if(isset($hasBeenEmailed)) {
-            if($hasBeenEmailed) $hasBeenEmailed = 1;
-            else $hasBeenEmailed = 0;
-            $query .= " AND ni.hasBeenEmailed=".$hasBeenEmailed;
+        if(isset($needsToBeEmailed)) {
+            if($needsToBeEmailed) $needsToBeEmailed = 1;
+            else $needsToBeEmailed = 0;
+            $query .= " AND ni.needsToBeEmailed=".$needsToBeEmailed;
         }
         if(isset($type)) {
             $query .= " AND n.type='".$type."'";
@@ -179,4 +148,41 @@ class DeliveryHelper {
         return $entityManager->createQuery($query)->getResult();        
     }
     
+    /**
+     * For each task, set each instance to needsToBeEmailed if it is active, and today is one of the taskReminderDays from the dateDue
+     */
+    public function updateTaskReminders()
+    {
+        $notificationInstanceAdmin = $this->container->get('ccetc.notification.admin.notificationinstance');
+        $notificationRepository = $this->container->get('doctrine')->getRepository('CCETCNotificationBundle:Notification');
+        
+        $notifications = $notificationRepository->findByType('task');
+        
+        $instancesUpdated = 0;
+        
+        foreach($notifications as $notification)
+        {
+            if($notification->getActive() && $notification->getTaskReminderDays()) {        
+                $reminderDays = explode(',', $notification->getTaskReminderDays());
+                foreach($reminderDays as $day) {
+                    $dateToCheckFor = date('Y-m-d', time() + ($day * 24 * 60 * 60));
+                    
+                    $dateDue = $notification->getDateTaskDue()->format('Y-m-d');
+                    
+                    if($dateDue == $dateToCheckFor) {
+                        foreach($notification->getInstances() as $instance)
+                        {
+                            if($instance->getActive()) {
+                                $instance->setNeedsToBeEmailed(true);
+                                $notificationInstanceAdmin->update($instance);
+                                $instancesUpdated++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        return $instancesUpdated;
+    }
 }

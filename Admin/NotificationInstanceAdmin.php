@@ -23,7 +23,7 @@ class NotificationInstanceAdmin extends Admin
         $listMapper
                 ->add('user')
                 ->add('notification')		
-                ->add('hasBeenEmailed')		
+                ->add('needsToBeEmailed')		
                 ->add('active')
                 ->add('_action', 'actions', array(
                     'actions' => array(
@@ -48,7 +48,7 @@ class NotificationInstanceAdmin extends Admin
         $formMapper
                 ->add('user')
                 ->add('notification')		
-                ->add('hasBeenEmailed')		
+                ->add('needsToBeEmailed')		
                 ->add('active')		
         ;
                
@@ -58,7 +58,7 @@ class NotificationInstanceAdmin extends Admin
         $showMapper
                 ->add('user')
                 ->add('notification')		
-                ->add('hasBeenEmailed')		
+                ->add('needsToBeEmailed')		
                 ->add('active')		
 		;
     }    

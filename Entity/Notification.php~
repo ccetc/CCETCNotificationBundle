@@ -56,6 +56,13 @@ class Notification
      * @ORM\Column(name="type", type="string", length=255, nullable="true")
      */
     private $type; 
+    
+    /**
+     * @var string $taskReminderDays
+     *
+     * @ORM\Column(name="taskReminderDays", type="string", length=255, nullable="true")
+     */
+    private $taskReminderDays;    
         
     /**
      * @var date $dateTaskDue
@@ -103,7 +110,7 @@ class Notification
             } else if($this->getDateTaskDue() < new \DateTime()) {
                 return 'Overdue!';
             } else {
-                return $this->getDateTaskDue()->format('F j');
+                return 'Due '.$this->getDateTaskDue()->format('F j');
             }
         }
     }

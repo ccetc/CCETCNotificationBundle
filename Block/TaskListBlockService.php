@@ -51,6 +51,7 @@ class TaskListBlockService extends BaseBlockService
         $deliveryHelper = $this->container->get('ccetc.notification.delivery');
         $utilityHelper = $this->container->get('ccetc.notification.utility');
         $notificationAdmin = $this->container->get('ccetc.notification.admin.notification');
+        $taskAdmin = $this->container->get('ccetc.notification.admin.task');
         
         $tasks = $deliveryHelper->findInstancesByUser($user, true, null, 'task');
         $activeTaskCount = $deliveryHelper->getActiveTaskCountByUser($user);
@@ -60,7 +61,8 @@ class TaskListBlockService extends BaseBlockService
             'settings'  => $settings,
             'tasks' => $tasks,
             'activeTaskCount' => $activeTaskCount,
-            'notificationAdmin' => $notificationAdmin            
+            'notificationAdmin' => $notificationAdmin,
+            'taskAdmin' => $taskAdmin
         ), $response);
     }
 

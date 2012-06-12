@@ -1,0 +1,17 @@
+<?php
+
+namespace CCETC\NotificationBundle\Entity;
+
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * CCETC\NotificationBundle\Entity\Notification
+ *
+ * @ORM\Table("Notification")
+ * @ORM\Entity(repositoryClass="CCETC\NotificationBundle\Entity\NotificationRepository")
+ */
+class Task extends Notification
+{
+    
+}
