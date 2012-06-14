@@ -12,12 +12,11 @@ use Sonata\AdminBundle\Route\RouteCollection;
 
 class NotificationAdmin extends Admin
 {    
-    protected $entityIcon = 'icon-signal';
+    protected $entityIconPath = 'icon-signal';
     
     public function configureRoutes(RouteCollection $collection)
     {
         $collection->add('myNotifications', 'my-notifications');
-        $collection->add('myTasks', 'my-tasks');
     }
     
     public $userAdmin;
@@ -30,18 +29,7 @@ class NotificationAdmin extends Admin
     
     public function getActionMenuItems($action, $object = null)
     {
-        $items = parent::getActionMenuItems($action, $object);
-        
-        unset($items['list']);
-        $items['myNotifications'] = array(
-            'label' => 'My Notifications',
-            'icon' => 'icon-signal',
-            'href' => $this->generateUrl('myNotifications')
-        );
-        
-        if($action == 'myNotifications') $items['myNotifications']['class'] = 'active';
-        
-        return $items;
+        return array();
     }
     
     protected function configureListFields(ListMapper $listMapper)
@@ -65,12 +53,14 @@ class NotificationAdmin extends Admin
     {
         $datagridMapper
                 ->add('userCreatedBy', null, array('isInvisible' => true))
+                ->add('type')
         ;
 
         $user = $this->configurationPool->getContainer()->get('security.context')->getToken()->getUser();
         
         $this->filterDefaults = array(
-            'userCreatedBy' => $user->getId()
+            'userCreatedBy' => $user->getId(),
+            'type' => 'notification'
         );
         
     }
