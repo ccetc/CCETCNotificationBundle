@@ -12,7 +12,7 @@ use Sonata\AdminBundle\Route\RouteCollection;
 
 class NotificationAdmin extends Admin
 {    
-    protected $entityIconPath = 'icon-signal';
+    protected $entityIcon = 'icon-signal';
     
     public function configureRoutes(RouteCollection $collection)
     {

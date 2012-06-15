@@ -7,13 +7,5 @@
 {% block content %}          
     <div class="ccetc-widget-container span10">
         {% include 'CCETCNotificationBundle:Notification:_notification_list.html.twig' with {'instances' : instances, 'active' : false } %}
-        {% if instances|length == 0 %}
-            <div class="ccetc-item-container">
-                <div class="ccetc-item ccetc-meta-item">
-                    No Notifications
-                </div>
-            </div>
-        {% endif %}
-
     </div>
 {% endblock %}

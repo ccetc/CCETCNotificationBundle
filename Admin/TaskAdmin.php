@@ -12,7 +12,7 @@ use Sonata\AdminBundle\Route\RouteCollection;
 class TaskAdmin extends Admin
 {
 
-    protected $entityIcon = 'icon-signal';
+    protected $entityIcon = 'icon-check';
 
     public function configureRoutes(RouteCollection $collection)
     {
@@ -20,7 +20,7 @@ class TaskAdmin extends Admin
     }
 
     public $userAdmin;
-    public $entityHeading = "Tasks";
+    public $entityLabelPlural = "Tasks";
 
     public function initialize()
     {
