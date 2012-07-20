@@ -58,7 +58,7 @@ class NotificationListBlockService extends BaseBlockService
             $hasOldNotifications = false;
         }
         
-        $utilityHelper->batchSetInactive($newNotificationInstances);
+    //    $utilityHelper->batchSetInactive($newNotificationInstances);
         
         return $this->renderResponse('CCETCNotificationBundle:Block:block_notification_list.html.twig', array(
             'block'     => $block,

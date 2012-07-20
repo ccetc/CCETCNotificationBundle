@@ -28,3 +28,20 @@
     background-color: #FCF8E3;
     border-color: #FBEED5;
 }
+
+div#feed {
+    background-color: white;
+    float: left;
+    width: 500px;
+    margin-left: 20px;
+    border-radius: 7px;
+    -moz-border-radius: 7px;
+    -webkit-border-radius: 7px;
+    box-shadow: #666 2px 4px 12px;
+    -moz-box-shadow: #666 2px 4px 12px;
+    -webkit-box-shadow: #666 2px 4px 12px;
+}
+
+div#feed .ccetc-item-container.first {
+    border-top: none;
+}

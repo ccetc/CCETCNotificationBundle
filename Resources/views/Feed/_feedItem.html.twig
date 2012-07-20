@@ -1,0 +1,29 @@
+{% if showLongMessage is not defined %}
+    {% set showLongMessage = true %}
+{% endif %}
+
+<div class="ccetc-item-container {{ first is defined and first ? 'first' : '' }} {{ last is defined and last ? 'last' : '' }}">
+    <div class="ccetc-item ccetc-icon-item {{ item.type }}">
+        {% if item.userCreatedBy is defined and item.userCreatedBy != "" %}
+            {% include 'MyCCEAppBundle:Staff:_staffIcon.html.twig' with {'size' : '50', 'staff' : item.userCreatedBy}  %}
+        {% elseif item.class is defined %}
+            <span style="margin: 5px; float: left; text-align: center; width: 50px;"><i class="{{ item.class }}" style="font-size: 30px; padding: 0;"></i></span>
+        {% endif %}
+            
+        <div style="">
+            <div style="float: left; line-height: 30px;">
+                {{ item.shortMessage|raw }}
+            </div>
+
+            <div class="date" style="">
+                {% if item.class is defined and item.userCreatedBy is defined and item.userCreatedBy != "" %}
+                    <i class="{{ item.class }}"></i>
+                {% endif %}
+                {{ item.dateTimeCreatedNice }}
+            </div>
+            <div style="clear: both; line-height: 0">&nbsp;</div>
+        </div>
+            
+        <div style="clear: both; line-height: 0">&nbsp;</div>            
+    </div>
+</div>

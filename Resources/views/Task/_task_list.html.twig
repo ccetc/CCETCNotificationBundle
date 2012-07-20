@@ -1,0 +1,14 @@
+<div class="ccetc-widget-container">
+    <div class="ccetc-widget-heading">
+        <h3><i class="icon-check" style="font-weight: normal;"></i> Tasks
+        {% if activeTaskCount > 0 %}
+            <span class="item-count">
+                {{ activeTaskCount }}
+            </span>
+            &nbsp;
+        {% endif %}
+        </h3>
+    </div>
+    {% include 'CCETCNotificationBundle:Notification:_notification_list.html.twig' with {'instances' : tasks, 'active' : false, 'noNotificationText' : 'No Tasks' } %}
+        
+</div>
