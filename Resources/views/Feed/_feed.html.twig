@@ -1,20 +1,46 @@
-{#<div class="feed-share-container">
-    <form>
-        <h4>Share something with your Staff</h4>
-        <textarea></textarea>
-        <input type="submit" class="btn" value="Post" />
-    </form>
-</div>#}
+{% if notifyWhoChoices|length > 0 %}
+    <div style="width: 500px; margin: 5px auto;">
+        <a href="#" id="notify-your-staff-toggle" class="btn pull-right"><i class="icon-signal"></i> Notify your Staff</a>
+        <div style="clear: both; line-height: 0;">&nbsp;</div>    
+    </div>
+
+    <div id="notify-your-staff-container" style="width: 400px; margin: 0 auto; display: none;">
+        <form action="{{ path('feedFormProcess') }}" method="post" {{ form_enctype(feedForm) }}>
+            {% if form_errors(feedForm) %}
+                <div class="alert-message block-message error">{{ form_errors(feedForm) }}</div>                   
+            {% endif %}
+            <h4>
+                Notify 
+
+                {% if feedForm.notifyWho is defined %}
+                    {{ form_widget(feedForm.notifyWho, { 'attr': {'style' : 'font-size: 15px; width: 350px;'} } ) }}
+                {% else %}
+                    {{ notifyWhoText }}
+                {% endif %}
+            </h4>
+            {% if form_errors(feedForm.message) %}
+                <div class="alert-message block-message error">{{ form_errors(feedForm.message) }}</div>                   
+            {% endif %}
+            {{ form_widget(feedForm.message, { 'attr': {'style' : 'width: 390px;'} } ) }}
+            {{ form_rest(feedForm) }}            
+            <div class="pull-right">
+                <input type="button" value="Cancel" class="btn" id="notify-your-staff-cancel" />
+                <input type="submit" class="btn primary" style="margin: 5px 0 15px 0;" value="Post" />
+            </div>
+        </form>
+        <div style="clear: both; line-height: 0;">&nbsp;</div>    
+    </div>
+{% endif %}
 <div class="ccetc-widget-container" id="feed">
 
     {% for instance in instances %}
         {% include 'CCETCNotificationBundle:Feed:_feedItem.html.twig' with {'item' : instance.notification, 'instance' : instance, 'first' : loop.first, 'last' : loop.last, 'showLongMessage' : false } %}
         {% endfor %}
         {% if instances|length == 0 %}
-            <div class="ccetc-item-container">
-                <div class="ccetc-item ccetc-meta-item">
+    <div class="ccetc-item-container">
+        <div class="ccetc-item ccetc-meta-item">
                     {{ noNotificationText is defined ? noNotificationText : 'No Itens' }}
-                </div>
             </div>
+        </div>
     {% endif %}        
-</div>
+    </div>

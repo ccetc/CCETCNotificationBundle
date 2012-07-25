@@ -44,16 +44,16 @@ class NotificationBuilder {
 
         if(isset($options['users'])) {
             if(is_array($options['users'])) {
-                foreach($users as $user)
+                foreach($options['users'] as $user)
                 {
-                    $this->createNotificationInstance($notification, $user, $hasAssociatedObject);
+                    $this->createNotificationInstance($notification, $user);
                 }
             } else {
-                $this->createNotificationInstance($notification, $options['users'], $hasAssociatedObject);
+                $this->createNotificationInstance($notification, $options['users']);
             }
         }
         if(isset($options['user'])) {
-            $this->createNotificationInstance($notification, $options['user'], $hasAssociatedObject);
+            $this->createNotificationInstance($notification, $options['user']);
         }
 
         return $notification;

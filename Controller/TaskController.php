@@ -16,7 +16,6 @@ class TaskController extends Controller
         $deliveryHelper = $this->container->get('ccetc.notification.delivery');
         $utilityHelper = $this->container->get('ccetc.notification.utility');
         $notificationAdmin = $this->container->get('ccetc.notification.admin.notification');
-        $taskAdmin = $this->container->get('ccetc.notification.admin.task');
         
         $tasks = $deliveryHelper->findInstancesByUser($user, true, null, 'task');
         $activeTaskCount = $deliveryHelper->getActiveTaskCountByUser($user);
@@ -25,7 +24,6 @@ class TaskController extends Controller
             'tasks' => $tasks,
             'activeTaskCount' => $activeTaskCount[0][1],
             'notificationAdmin' => $notificationAdmin,
-            'taskAdmin' => $taskAdmin
         ));        
     }
    
