@@ -16,7 +16,7 @@ class NotificationController extends Controller
         $utilityHelper = $this->container->get('ccetc.notification.utility');
         $notificationAdmin = $this->container->get('ccetc.notification.admin.notification');
                 
-        $instances = $deliveryHelper->findInstancesByUser($user, false, null, 'notification');
+        $instances = $deliveryHelper->findInstancesByUser($user, null, null, 'notification');
         
         $feedForm = $this->getFeedForm();
         
@@ -115,7 +115,7 @@ class NotificationController extends Controller
         $user = $this->container->get('security.context')->getToken()->getUser();
         $notifyWhoChoices = array();
         
-        if( $this->container->get('security.context')->isGranted('ROLE_SUPER_ADMIN') ) {
+        if( $user->isSuperAdmin() || $this->container->get('security.context')->isGranted('ROLE_SONATA_USER_ADMIN_USER_ADMIN') ) {
             $notifyWhoChoices['allStaff'] = 'All Staff';
         }
 

@@ -90,9 +90,9 @@ class Notification
         $date = $this->getDatetimeCreated()->format('d/m/Y');
         
         if($date == date('d/m/Y')) {
-            return 'Today - '.$this->getDatetimeCreated()->format('g:ia');
+            return $this->getDatetimeCreated()->format('g:ia');
         } else if($date == date('d/m/Y', time() - (24 * 60 * 60))) {
-            return 'Yesterday - '.$this->getDatetimeCreated()->format('g:ia');
+            return 'Yesterday';
         } else {
             return $this->getDatetimeCreated()->format('F j');
         }

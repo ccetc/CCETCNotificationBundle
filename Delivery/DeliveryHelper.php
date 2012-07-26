@@ -128,7 +128,7 @@ class DeliveryHelper {
         }
 
         $query .= " ORDER BY n.datetimeCreated DESC";
-        
+
         return $entityManager->createQuery($query)->getResult();
     }
 

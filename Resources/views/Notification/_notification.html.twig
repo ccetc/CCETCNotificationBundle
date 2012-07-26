@@ -3,7 +3,7 @@
 {% endif %}
 
 <div class="ccetc-item-container {{ notification.priority is defined and instance is defined and instance.active ? notification.priority ~ '-priority' : '' }} {{ first is defined and first ? 'first' : '' }} {{ last is defined and last ? 'last' : '' }}">
-    <div class="ccetc-item ccetc-icon-item {{ notification.type }} {{ instance is defined and instance.active ? 'active' : 'inactive' }}">
+    <div class="ccetc-item ccetc-icon-item {{ notification.type }} {{ instance is defined and instance.active ? 'active' : '' }}">
         <div class="ccetc-main-content-container">
             <div class="short-message">
                 {% if notification.type == "task" and instance is defined and not instance.active %}

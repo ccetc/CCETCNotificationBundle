@@ -37,7 +37,7 @@
         {% include 'CCETCNotificationBundle:Feed:_feedItem.html.twig' with {'item' : instance.notification, 'instance' : instance, 'first' : loop.first, 'last' : loop.last, 'showLongMessage' : false } %}
         {% endfor %}
         {% if instances|length == 0 %}
-    <div class="ccetc-item-container">
+    <div class="ccetc-item-container last">
         <div class="ccetc-item ccetc-meta-item">
                     {{ noNotificationText is defined ? noNotificationText : 'No Items' }}
             </div>
