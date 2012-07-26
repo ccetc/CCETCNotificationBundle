@@ -16,28 +16,22 @@ class NotificationController extends Controller
         $utilityHelper = $this->container->get('ccetc.notification.utility');
         $notificationAdmin = $this->container->get('ccetc.notification.admin.notification');
                 
-        $newNotificationInstances = $deliveryHelper->findInstancesByUser($user, true, null, 'notification');
-        $oldNotificationInstances = $deliveryHelper->findInstancesByUser($user, false, null, 'notification');
-        
-        if(count($oldNotificationInstances) > 0) {
-            $hasOldNotifications = true;
-        } else {
-            $hasOldNotifications = false;
-        }
+        $instances = $deliveryHelper->findInstancesByUser($user, false, null, 'notification');
         
         $feedForm = $this->getFeedForm();
         
         $notifyWhoChoices = $this->getNotifyWhoChoices();
         $notifyWhoText = $this->getNotifyWhoText();
+        $showNotifyWhoText = count($notifyWhoChoices) == 1;
         
-    //  TODO: uncomment when ready
-    //  $utilityHelper->batchSetInactive($newNotificationInstances);
+        $utilityHelper->batchSetInactive($instances);
         
         return $this->render('CCETCNotificationBundle:Feed:_feed.html.twig', array(
-            'instances' => $newNotificationInstances,
+            'instances' => $instances,
             'feedForm' => $feedForm->createView(),
             'notifyWhoChoices' => $this->getNotifyWhoChoices(),
-            'notifyWhoText' => $notifyWhoText
+            'notifyWhoText' => $notifyWhoText,
+            'showNotifyWhoText' => $showNotifyWhoText
         ));
     }
     

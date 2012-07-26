@@ -12,10 +12,10 @@
             <h4>
                 Notify 
 
-                {% if feedForm.notifyWho is defined %}
-                    {{ form_widget(feedForm.notifyWho, { 'attr': {'style' : 'font-size: 15px; width: 350px;'} } ) }}
+                {% if showNotifyWhoText  %}
+                    {{ notifyWhoText }}:
                 {% else %}
-                    {{ notifyWhoText }}
+                    {{ form_widget(feedForm.notifyWho, { 'attr': {'style' : 'font-size: 15px; width: 350px;'} } ) }}
                 {% endif %}
             </h4>
             {% if form_errors(feedForm.message) %}
@@ -39,7 +39,7 @@
         {% if instances|length == 0 %}
     <div class="ccetc-item-container">
         <div class="ccetc-item ccetc-meta-item">
-                    {{ noNotificationText is defined ? noNotificationText : 'No Itens' }}
+                    {{ noNotificationText is defined ? noNotificationText : 'No Items' }}
             </div>
         </div>
     {% endif %}        

@@ -36,9 +36,9 @@ div#feed {
     border-radius: 7px;
     -moz-border-radius: 7px;
     -webkit-border-radius: 7px;
-    box-shadow: #666 2px 4px 12px;
-    -moz-box-shadow: #666 2px 4px 12px;
-    -webkit-box-shadow: #666 2px 4px 12px;
+    box-shadow: #888 0px 3px 5px;
+    -moz-box-shadow: #888 0px 3px 5px;
+    -webkit-box-shadow: #888 0px 3px 5px;
 }
 
 div#feed .ccetc-item-container.first {
