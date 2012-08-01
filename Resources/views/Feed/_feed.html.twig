@@ -1,13 +1,8 @@
 {% if notifyWhoChoices|length > 0 %}
-    <div style="width: 500px; margin: 5px auto;">
-        <a href="#" id="notify-your-staff-toggle" class="btn pull-right"><i class="icon-signal"></i> Notify your Staff</a>
-        <div style="clear: both; line-height: 0;">&nbsp;</div>    
-    </div>
-
     <div id="notify-your-staff-container" style="width: 400px; margin: 0 auto; display: none;">
         <form action="{{ path('feedFormProcess') }}" method="post" {{ form_enctype(feedForm) }}>
             {% if form_errors(feedForm) %}
-                <div class="alert-message block-message error">{{ form_errors(feedForm) }}</div>                   
+            <div class="alert-message block-message error">{{ form_errors(feedForm) }}</div>                   
             {% endif %}
             <h4>
                 Notify 
@@ -19,7 +14,7 @@
                 {% endif %}
             </h4>
             {% if form_errors(feedForm.message) %}
-                <div class="alert-message block-message error">{{ form_errors(feedForm.message) }}</div>                   
+            <div class="alert-message block-message error">{{ form_errors(feedForm.message) }}</div>                   
             {% endif %}
             {{ form_widget(feedForm.message, { 'attr': {'style' : 'width: 390px;'} } ) }}
             {{ form_rest(feedForm) }}            
@@ -31,16 +26,31 @@
         <div style="clear: both; line-height: 0;">&nbsp;</div>    
     </div>
 {% endif %}
-<div class="ccetc-widget-container" id="feed">
 
+<div style="width: 500px; margin: 15px auto 5px auto;">
+    <h3 style="float: left; line-height: 28px;"><i class="icon-signal"></i> My Notifications</h3>
+    {% if notifyWhoChoices|length > 0 %}
+        <a href="#" id="notify-your-staff-toggle" class="btn pull-right"><i class="icon-signal"></i> Notify your Staff</a>
+    {% endif %}
+    <div style="clear: both; line-height: 0;">&nbsp;</div>    
+</div>
+
+<div class="ccetc-widget-container" id="feed">
     {% for instance in instances %}
-        {% include 'CCETCNotificationBundle:Feed:_feedItem.html.twig' with {'item' : instance.notification, 'instance' : instance, 'first' : loop.first, 'last' : loop.last, 'showLongMessage' : false } %}
-        {% endfor %}
-        {% if instances|length == 0 %}
-    <div class="ccetc-item-container last">
-        <div class="ccetc-item ccetc-meta-item">
-                    {{ noNotificationText is defined ? noNotificationText : 'No Items' }}
+        {% include 'CCETCNotificationBundle:Feed:_feedItem.html.twig' with {'item' : instance.notification, 'instance' : instance, 'first' : loop.first, 'last' : loop.last, 'showLongMessage' : false, 'index' : loop.index } %}
+    {% endfor %}
+    
+    {% if instances|length == 0 %}
+        <div class="ccetc-item-container last">
+            <div class="ccetc-item ccetc-meta-item">
+                {{ noNotificationText is defined ? noNotificationText : 'No Items' }}
+            </div>
+        </div>
+    {% elseif instances|length > 3 %}
+        <div class="ccetc-item-container last"  id="more-feed-items">
+            <div class="ccetc-item ccetc-meta-item">
+                <i class="icon-plus-circle"></i> <a href="#">more</a>
             </div>
         </div>
     {% endif %}        
-    </div>
+</div>

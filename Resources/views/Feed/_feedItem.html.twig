@@ -2,7 +2,7 @@
     {% set showLongMessage = true %}
 {% endif %}
 
-<div class="ccetc-item-container {{ first is defined and first ? 'first' : '' }} {{ last is defined and last ? 'last' : '' }}">
+<div style="{{ index > 3 ? 'display: none;' : '' }}" class="ccetc-item-container {{ first is defined and first ? 'first' : '' }} {{ last is defined and last ? 'last' : '' }}">
     <div class="ccetc-item ccetc-icon-item {{ item.type }}">
         {% if item.userCreatedBy is defined and item.userCreatedBy != "" %}
             {% include 'MyCCEAppBundle:Staff:_staffIcon.html.twig' with {'size' : '50', 'staff' : item.userCreatedBy}  %}
@@ -11,7 +11,7 @@
         {% endif %}
             
         <div style="">
-            <div style="float: left; line-height: 30px;">
+            <div style="float: left; width: 375px; margin-top: 5px;">
                 {{ item.shortMessage|raw }}
             </div>
 

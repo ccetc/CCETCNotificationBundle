@@ -196,7 +196,7 @@ class Notification
      */
     public function getShortMessage()
     {
-        return $this->autoLinkText($this->shortMessage);
+        return $this->shortMessage;
     }
 
     /**
