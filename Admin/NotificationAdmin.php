@@ -14,22 +14,12 @@ class NotificationAdmin extends Admin
 {    
     protected $entityIcon = 'icon-signal';
     
-    public function configureRoutes(RouteCollection $collection)
-    {
-        $collection->add('myNotifications', 'my-notifications');
-    }
-    
     public $userAdmin;
     
     public function initialize()
     {
         parent::initialize();
         $this->userAdmin = $this->getConfigurationPool()->getContainer()->get('sonata.user.admin.user');
-    }
-    
-    public function getActionMenuItems($action, $object = null)
-    {
-        return array();
     }
     
     protected function configureListFields(ListMapper $listMapper)
@@ -51,17 +41,6 @@ class NotificationAdmin extends Admin
     
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper
-                ->add('userCreatedBy', null, array('isInvisible' => true))
-                ->add('type')
-        ;
-
-        $user = $this->configurationPool->getContainer()->get('security.context')->getToken()->getUser();
-        
-        $this->filterDefaults = array(
-            'userCreatedBy' => $user->getId(),
-            'type' => 'notification'
-        );
         
     }
     protected function configureFormFields(FormMapper $formMapper)
@@ -86,12 +65,11 @@ class NotificationAdmin extends Admin
                     'expanded' => true,
                     'choices' => $userChoices
                 ))
-                ->add('class', 'choice', array('label' => 'Type', 'choices' => array(
-                    'icon-globe green' => 'normal notification',
-                    'icon-attention red' => 'alert',
-                    'icon-bell orange' => 'reminder',
-                    'icon-info-circle lightBlue' => 'information',
-                )))
+                ->add('datetimeCreated', null, array('label' => 'Date Created', 'required' => false))
+                ->add('dateTaskDue', null, array('label' => 'Date Task Due', 'required' => false))
+                ->add('class')
+                ->add('type', 'choice', array('choices' => array('notification' => 'notification', 'task' => 'task')))
+                ->add('userCreatedBy', null, array('required' => false))
         ;
     }
     
@@ -106,9 +84,11 @@ class NotificationAdmin extends Admin
     }
     public function prePersist($object)
     {
-        $object->setDatetimeCreated(new \DateTime());
+        if(!$object->getDatetimeCreated()) {
+            $object->setDatetimeCreated(new \DateTime());
+        }
 
-        if( $this->configurationPool->getContainer()->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if( !$object->getUserCreatedBy() && $this->configurationPool->getContainer()->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY')) {
             $user = $this->configurationPool->getContainer()->get('security.context')->getToken()->getUser();
             $object->setUserCreatedBy($user);
         }        
