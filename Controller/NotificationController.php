@@ -55,16 +55,22 @@ class NotificationController extends Controller
             {
                 $formData = $feedForm->getData();
                 
-                switch($formData['notifyWho'])
+                switch(true)
                 {
-                    case 'allStaff':
+                    case strstr($formData['notifyWho'], 'allUsers'):
                         $users = $userRepository->findAll();
                         break;
-                    case 'supervisees':
+                    case strstr($formData['notifyWho'], 'supervisees'):
                         $users = $user->getSupervisees();
                         break;
-                    case 'childSupervisees':  
+                    case strstr($formData['notifyWho'], 'childSupervisees'):
                         $users = $user->getChildSupervisees();
+                        break;
+                    case strstr($formData['notifyWho'], 'county'):
+                        $users = $this->getCountyByNameIdString($formData['notifyWho'])->getUsers();
+                        break;
+                    case strstr($formData['notifyWho'], 'region'):
+                        $users = $this->getRegionByNameIdString($formData['notifyWho'])->getUsers();
                         break;
                     default:
                         $users = null;
@@ -95,6 +101,22 @@ class NotificationController extends Controller
         return $this->redirect($this->generateUrl('home'));
     }
     
+    public function getCountyByNameIdString($countyString) {
+        $countyRepository = $this->container->get('doctrine')->getRepository('MyCCEAppBundle:County');
+        $countyStringParts = explode('-', $countyString);
+        $countyId = $countyStringParts[1];
+
+        return $countyRepository->findOneById($countyId);
+    }
+    
+    public function getRegionByNameIdString($regionString) {
+        $regionRepository = $this->container->get('doctrine')->getRepository('MyCCEAppBundle:Region');
+        $regionStringParts = explode('-', $regionString);
+        $regionId = $regionStringParts[1];
+
+        return $regionRepository->findOneById($regionId);
+    }
+    
     public function getFeedForm() {
         $notifyWhoChoices = $this->getNotifyWhoChoices();
         
@@ -115,16 +137,27 @@ class NotificationController extends Controller
         $user = $this->container->get('security.context')->getToken()->getUser();
         $notifyWhoChoices = array();
         
-        if( $user->isSuperAdmin() || $this->container->get('security.context')->isGranted('ROLE_SONATA_USER_ADMIN_USER_ADMIN') ) {
-            $notifyWhoChoices['allStaff'] = 'All Staff';
+        if( $user->isSuperAdmin()) {
+            $notifyWhoChoices['allUsers'] = 'All Users';
         }
-
+        
+        if($this->container->get('security.context')->isGranted('ROLE_NOTIFY_REGION_STAFF')) {
+            $notifyWhoChoices['region-'.$user->getWorkingRegion()->getId()] = 'Staff in '.$user->getWorkingRegion().' Region';
+            foreach($user->getWorkingRegion()->getCounties() as $county)
+            {
+                $notifyWhoChoices['county-'.$county->getId()] = 'Staff in '.$county.' County';
+            }
+        }
+        
+        if($this->container->get('security.context')->isGranted('ROLE_NOTIFY_COUNTY_STAFF')) {
+            $notifyWhoChoices['county-'.$user->getWorkingCounty()->getId()] = 'Staff in '.$user->getWorkingCounty().' County';
+        }
+        
         if($user->hasSupervisees()) {
             $notifyWhoChoices['supervisees'] = 'Staff I supervise';
         }
          
         if($user->hasChildSupervisees()) {
-            // if user has supervisees with supervisees
             $notifyWhoChoices['childSupervisees'] = 'Staff I supervise and staff they supervise';
         }
         

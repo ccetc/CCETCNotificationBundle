@@ -63,7 +63,7 @@ class DeliveryHelper {
         $mailer = $this->container->get('mailer');
         
         $fromEmail = $this->container->getParameter('fos_user.registration.confirmation.from_email');
-        $applicationTitle = $this->container->getParameter('fos_user.settings.application_title');
+        $applicationTitle = $this->container->getParameter('fos_user.options.application_title');
         
         $instances = $utilityHelper->splitInstancesByType($instances);
         
