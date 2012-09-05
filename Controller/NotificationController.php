@@ -75,7 +75,6 @@ class NotificationController extends Controller
                     default:
                         $users = null;
                 }
-                
                 $notification = $this->container->get('ccetc.notification.builder')->createNotification(array(
                     'values' => array(
                         'shortMessage' => $formData['message'],

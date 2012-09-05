@@ -199,6 +199,11 @@ class Notification
         return $this->shortMessage;
     }
 
+    public function getAutolinkedShortMessage()
+    {
+        return $this->autoLinkText($this->shortMessage);
+    }
+    
     /**
      * Set longMessage
      *

@@ -43,7 +43,7 @@ class NotificationBuilder {
         $notificationAdmin->create($notification);
 
         if(isset($options['users'])) {
-            if(is_array($options['users'])) {
+            if(is_array($options['users']) || get_class($options['users']) == "Doctrine\ORM\PersistentCollection") {
                 foreach($options['users'] as $user)
                 {
                     $this->createNotificationInstance($notification, $user);
