@@ -80,6 +80,7 @@ class DeliveryHelper {
         $body = $this->container->get('twig')->render('CCETCNotificationBundle:Email:digest.html.twig', array(
             'totals' => $totals,
             'instances' => $instances,
+            'appHref' => $this->getContainer()->getParameter('my_cce_app.server_address'),
             'settingsHref' => $this->getContainer()->getParameter('my_cce_app.server_address').$this->getContainer()->get('router')->generate('fos_user_settings')
         ));        
         $message = \Swift_Message::newInstance()

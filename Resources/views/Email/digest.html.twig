@@ -1,6 +1,6 @@
 <html>
 
-    You have {{ totals }}:
+    You have {{ totals }} on <a href="{{ appHref }}">MyCCE</a>:
     <br/><br/>
 
     {% for type, typeInstances in instances %}
@@ -13,7 +13,7 @@
 
                 <div style="border-bottom: 1px solid #ddd; padding: 6px 8px; overflow: auto;">
                     <div style="overflow: auto;">
-                        <div style="float: left; font-weight: bold;">
+                        <div style="float: left;">
                             {{ notification.shortMessage }}
                         </div>
 
@@ -22,6 +22,7 @@
                         {% else %}
                             <div style="float: right; color: #666;">{{ notification.dateTimeCreatedNice }}</div>
                         {% endif %}
+                        <div style="float: right; margin-right: 5px;"><a href="{{ appHref }}">View</a></div>
                     </div>
 
                     {% if notification.longMessage %} <div style="float: left;">{{ notification.longMessage|raw }}</div> {% endif %}
