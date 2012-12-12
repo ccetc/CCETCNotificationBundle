@@ -76,7 +76,6 @@ class DeliveryHelper {
             if($totals != "") $totals .= " and ";
             $totals .= count($typeInstances).' '.$noun;
         }
- 
         $body = $this->container->get('twig')->render('CCETCNotificationBundle:Email:digest.html.twig', array(
             'totals' => $totals,
             'instances' => $instances,

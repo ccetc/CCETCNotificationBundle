@@ -14,7 +14,7 @@
                 <div style="border-bottom: 1px solid #ddd; padding: 6px 8px; overflow: auto;">
                     <div style="overflow: auto;">
                         <div style="float: left;">
-                            {{ notification.shortMessage }}
+                            {{ notification.shortMessage|raw }}
                         </div>
 
                         {% if notification.type == "task" %}
