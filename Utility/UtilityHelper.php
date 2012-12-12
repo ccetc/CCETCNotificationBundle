@@ -44,24 +44,43 @@ class UtilityHelper {
     }
     
     /**
-     * Set $instance as inactive
+     * Set $instance as active/inactive
      * 
      * @param array of NotificationInstances $instances 
      */
-    public function batchSetInactive($instances)
+    public function batchSetActive($instances, $value = true)
     {
         $entityManager = $this->container->get('doctrine')->getEntityManager();
 
         foreach($instances as $instance)
         {
             if(!$instance->getHasAssociatedObject()) {
-                $instance->setActive(false);
+                $instance->setActive($value);
                 $entityManager->persist($instance);
             }
         }
         
         $entityManager->flush();
     }
+    /**
+     * Set $instance as needsToBeEmailed - true/false
+     * 
+     * @param array of NotificationInstances $instances 
+     */
+    public function batchSetNeedsToBeEmailed($instances, $value = true)
+    {
+        $entityManager = $this->container->get('doctrine')->getEntityManager();
+
+        foreach($instances as $instance)
+        {
+            if(!$instance->getHasAssociatedObject()) {
+                $instance->setNeedsToBeEmailed($value);
+                $entityManager->persist($instance);
+            }
+        }
+        
+        $entityManager->flush();
+    }    
     
     public function splitInstancesByType($instances) {
         $result = array();

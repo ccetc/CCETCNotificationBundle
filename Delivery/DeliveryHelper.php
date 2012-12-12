@@ -31,8 +31,8 @@ class DeliveryHelper {
         $notificationInstanceAdmin = $this->container->get('ccetc.notification.admin.notificationinstance');
         $emailsSent = 0;
         
-        $users = $userRepository->findBy(array('notificationEmailFrequency' => $frequency));
-        
+        $users = $userRepository->findBy(array('notificationEmailFrequency' => $frequency, 'tester' => true));
+                
         foreach($users as $user)
         {
             $instancesToEmail = $this->findInstancesByUser($user, true, true);
@@ -80,7 +80,7 @@ class DeliveryHelper {
         $body = $this->container->get('twig')->render('CCETCNotificationBundle:Email:digest.html.twig', array(
             'totals' => $totals,
             'instances' => $instances,
-            'profileHref' => $this->getContainer()->getParameter('my_cce_app.server_address').$this->getContainer()->get('router')->generate('fos_user_profile_show')
+            'settingsHref' => $this->getContainer()->getParameter('my_cce_app.server_address').$this->getContainer()->get('router')->generate('fos_user_settings')
         ));        
         $message = \Swift_Message::newInstance()
                 ->setSubject($applicationTitle.' - Notification & Task Digest')
@@ -89,7 +89,7 @@ class DeliveryHelper {
                 ->setContentType('text/html')
                 ->setBody($body)
         ;
-        $mailer->send($message);
+        if($user->getEmail() == "haggertypat@gmail.com") $mailer->send($message);
     }
     
     

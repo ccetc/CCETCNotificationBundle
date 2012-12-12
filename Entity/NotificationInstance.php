@@ -60,7 +60,7 @@ class NotificationInstance
     
     public function __construct()
     {
-        if(!isset($this->needsToBeEmailed)) $this->needsToBeEmailed = false;
+        if(!isset($this->needsToBeEmailed)) $this->needsToBeEmailed = true;
         if(!isset($this->active)) $this->active = true;
     }
     

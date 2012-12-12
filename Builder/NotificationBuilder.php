@@ -8,10 +8,13 @@ namespace CCETC\NotificationBundle\Builder;
 class NotificationBuilder {
     
     protected $container;
+    protected $notificationInstanceAdmin;
     
     public function __construct($container)
     {
         $this->container = $container;
+        $this->notificationInstanceAdmin = $this->container->get('ccetc.notification.admin.notificationinstance');
+        
     }
     
     public function getContainer()
@@ -52,6 +55,12 @@ class NotificationBuilder {
                 $this->createNotificationInstance($notification, $options['users']);
             }
         }
+        if(isset($options['user_ids'])) {
+            foreach($options['user_ids'] as $user_id)
+            {
+                $this->createNotificationInstance($notification->getId(), $user_id, true);
+            }            
+        }
         if(isset($options['user'])) {
             $this->createNotificationInstance($notification, $options['user']);
         }
@@ -64,15 +73,21 @@ class NotificationBuilder {
      * @param type $notification
      * @param type $user 
      */
-    public function createNotificationInstance($notification, $user)
+    public function createNotificationInstance($notification, $user, $byId = false)
     {
         $instance = new \CCETC\NotificationBundle\Entity\NotificationInstance();
-        $instance->setUser($user);
-        $instance->setNotification($notification);            
-        $notificationInstanceAdmin = $this->container->get('ccetc.notification.admin.notificationinstance');
-        $notificationInstanceAdmin->create($instance);
+
+        if($byId) {
+            $em = $this->container->get('doctrine')->getEntityManager();
+            $instance->setUser($em->getReference('ApplicationSonataUserBundle:User', $user));
+            $instance->setNotification($em->getReference('CCETCNotificationBundle:Notification', $notification));            
+        } else {
+            $instance->setUser($user);
+            $instance->setNotification($notification);                        
+        }
+        
+        $this->notificationInstanceAdmin->create($instance);
         
         return $instance;
     }
-    
 }

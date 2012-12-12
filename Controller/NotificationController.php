@@ -24,7 +24,8 @@ class NotificationController extends Controller
         $notifyWhoText = $this->getNotifyWhoText();
         $showNotifyWhoText = count($notifyWhoChoices) == 1;
         
-        $utilityHelper->batchSetInactive($instances);
+        $utilityHelper->batchSetActive($instances, false);
+        $utilityHelper->batchSetNeedsToBeEmailed($instances, false);
         
         return $this->render('CCETCNotificationBundle:Feed:_feed.html.twig', array(
             'instances' => $instances,
@@ -37,6 +38,9 @@ class NotificationController extends Controller
     
     public function processFeedFormAction()
     {
+        ini_set('memory_limit', '1024M');
+        set_time_limit ( 0 );
+
         $user = $this->container->get('security.context')->getToken()->getUser();
         $request = $this->getRequest();
         $feedForm = $this->getFeedForm();
@@ -97,7 +101,7 @@ class NotificationController extends Controller
                 $this->getRequest()->getSession()->setFlash('sonata_flash_error', 'Your staff could not be notified');
             }
         }        
-        return $this->redirect($this->generateUrl('home'));
+     //   return $this->redirect($this->generateUrl('home'));
     }
     
     public function getCountyByNameIdString($countyString) {
