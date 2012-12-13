@@ -198,11 +198,6 @@ class Notification
     {
         return $this->shortMessage;
     }
-
-    public function getAutolinkedShortMessage()
-    {
-        return $this->autoLinkText($this->shortMessage);
-    }
     
     /**
      * Set longMessage
@@ -249,7 +244,7 @@ class Notification
      *
      * @param Application\Sonata\UserBundle\Entity\User $userCreatedBy
      */
-    public function setUserCreatedBy(\Application\Sonata\UserBundle\Entity\User $userCreatedBy)
+    public function setUserCreatedBy($userCreatedBy)
     {
         $this->userCreatedBy = $userCreatedBy;
     }
@@ -352,7 +347,7 @@ class Notification
      * @param  string $text
      * @return string
      */
-    function autoLinkText($text)
+    public static function autoLinkText($text)
     {
        $pattern  = '#\b(([\w-]+://?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))#';
        $callback = create_function('$matches', '

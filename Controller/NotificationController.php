@@ -5,6 +5,7 @@ namespace CCETC\NotificationBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use CCETC\NotificationBundle\Entity\Notification;
 
 class NotificationController extends Controller
 {    
@@ -59,6 +60,8 @@ class NotificationController extends Controller
             {
                 $formData = $feedForm->getData();
                 
+                $message = Notification::autoLinkText($formData['message']);
+                
                 switch(true)
                 {
                     case strstr($formData['notifyWho'], 'allUsers'):
@@ -81,7 +84,7 @@ class NotificationController extends Controller
                 }
                 $notification = $this->container->get('ccetc.notification.builder')->createNotification(array(
                     'values' => array(
-                        'shortMessage' => $formData['message'],
+                        'shortMessage' => $message,
                         'userCreatedBy' => $user,
                         'datetimeCreated' => new \DateTime()
                     ),

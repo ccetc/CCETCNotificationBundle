@@ -35,13 +35,18 @@ class NotificationBuilder {
     public function createNotification($options)
     {
         $notification = new \CCETC\NotificationBundle\Entity\Notification();
+        $user = $this->container->get('security.context')->getToken()->getUser();
         
         foreach($options['values'] as $field => $value)
         {
             $method = 'set'.ucfirst($field);
             $notification->$method($value);
         }
-                
+           
+        if(!array_key_exists('userCreatedBy', $options['values'])) { // check for the array key and not the value, so we can send null to create an anonymous notification
+            $notification->setUserCreatedBy($user);
+        }        
+                        
         $notificationAdmin = $this->container->get('ccetc.notification.admin.notification');        	    
         $notificationAdmin->create($notification);
 

@@ -88,11 +88,6 @@ class NotificationAdmin extends Admin
             $object->setDatetimeCreated(new \DateTime());
         }
 
-        if( !$object->getUserCreatedBy() && $this->configurationPool->getContainer()->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY')) {
-            $user = $this->configurationPool->getContainer()->get('security.context')->getToken()->getUser();
-            $object->setUserCreatedBy($user);
-        }        
-                
         parent::prePersist($object);
     }    
 }
