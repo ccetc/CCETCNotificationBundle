@@ -65,6 +65,8 @@ class DeliveryHelper {
         $fromEmail = $this->container->getParameter('fos_user.registration.confirmation.from_email');
         $applicationTitle = $this->container->getParameter('fos_user.options.application_title');
         
+        print_r( $fromEmail );
+        
         $instances = $utilityHelper->splitInstancesByType($instances);
         
         $totals = "";
