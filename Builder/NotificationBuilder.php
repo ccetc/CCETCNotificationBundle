@@ -50,26 +50,30 @@ class NotificationBuilder {
         $notificationAdmin = $this->container->get('ccetc.notification.admin.notification');        	    
         $notificationAdmin->create($notification);
 
+        $instances = array();
+        
         if(isset($options['users'])) {
             if(is_array($options['users']) || get_class($options['users']) == "Doctrine\ORM\PersistentCollection") {
                 foreach($options['users'] as $user)
                 {
-                    $this->createNotificationInstance($notification, $user);
+                    $instances[] = $this->createNotificationInstance($notification, $user);
                 }
             } else {
-                $this->createNotificationInstance($notification, $options['users']);
+                $instances[] = $this->createNotificationInstance($notification, $options['users']);
             }
         }
         if(isset($options['user_ids'])) {
             foreach($options['user_ids'] as $user_id)
             {
-                $this->createNotificationInstance($notification->getId(), $user_id, true);
+                $instances[] = $this->createNotificationInstance($notification->getId(), $user_id, true);
             }            
         }
         if(isset($options['user'])) {
-            $this->createNotificationInstance($notification, $options['user']);
+            $instances[] = $this->createNotificationInstance($notification, $options['user']);
         }
 
+        $this->notificationInstanceAdmin->batchCreate($instances);
+        
         return $notification;
     }
     
@@ -91,8 +95,8 @@ class NotificationBuilder {
             $instance->setNotification($notification);                        
         }
         
-        $this->notificationInstanceAdmin->create($instance);
+        //$this->notificationInstanceAdmin->create($instance);
         
         return $instance;
-    }
+    }    
 }

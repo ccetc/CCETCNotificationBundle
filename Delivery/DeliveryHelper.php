@@ -89,7 +89,7 @@ class DeliveryHelper {
                 ->setContentType('text/html')
                 ->setBody($body)
         ;
-        if($user->getEmail() == "haggertypat@gmail.com") $mailer->send($message);
+        $mailer->send($message);
     }
     
     

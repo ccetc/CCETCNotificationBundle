@@ -32,7 +32,7 @@ class Notification
     /**
      * @var string $shortMessage
      *
-     * @ORM\Column(name="shortMessage", type="string", length=255)
+     * @ORM\Column(name="shortMessage", type="text")
      */
     private $shortMessage;
     

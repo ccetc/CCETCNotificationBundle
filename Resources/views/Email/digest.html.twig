@@ -6,7 +6,7 @@
     {% for type, typeInstances in instances %}
         {% if instances|length > 1 %} <b>{{ type|capitalize }}s</b><br/><br/>{% endif %}
         
-        <div style="width: 600px; margin: 0 auto; border: 1px solid #ddd; border-bottom: none;">
+        <div style="width: 90%; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; border-bottom: none;">
 
             {% for instance in typeInstances %}
                 {% set notification = instance.notification %}
