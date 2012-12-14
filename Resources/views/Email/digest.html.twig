@@ -14,7 +14,10 @@
                 <div style="border-bottom: 1px solid #ddd; padding: 6px 8px; overflow: auto;">
                     <div style="overflow: auto;">
                         <div style="float: left;">
-                            {{ notification.shortMessage|raw }}
+                            {% if notification.userCreatedBy is defined and notification.userCreatedBy != "" and (notification.class is not defined or notification.class == "") %}
+                                {{ notification.userCreatedBy }}:                 
+                            {% endif %}                            
+                            <span style="color: #666;">{{ notification.shortMessage|raw }}</span>
                         </div>
 
                         {% if notification.type == "task" %}
