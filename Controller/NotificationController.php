@@ -39,9 +39,6 @@ class NotificationController extends Controller
     
     public function processFeedFormAction()
     {
-        ini_set('memory_limit', '1024M');
-        set_time_limit ( 0 );
-
         $user = $this->container->get('security.context')->getToken()->getUser();
         $request = $this->getRequest();
         $feedForm = $this->getFeedForm();
@@ -51,7 +48,8 @@ class NotificationController extends Controller
         }
         
         $userRepository = $this->container->get('doctrine')->getRepository('ApplicationSonataUserBundle:User');
-        
+        $myCCEHelper = $this->container->get('my_cce.app.helper.myccehelper');        
+
         $feedForm->bindRequest($request); 
         
         if($request->getMethod() == 'POST')
@@ -82,13 +80,14 @@ class NotificationController extends Controller
                     default:
                         $users = null;
                 }
+                $userIds = $myCCEHelper->getUserIds($users);
                 $notification = $this->container->get('ccetc.notification.builder')->createNotification(array(
                     'values' => array(
                         'shortMessage' => $message,
                         'userCreatedBy' => $user,
                         'datetimeCreated' => new \DateTime()
                     ),
-                    'users' => $users
+                    'user_ids' => $userIds
                 ));
                 
                 if(isset($notification)) {
@@ -104,7 +103,7 @@ class NotificationController extends Controller
                 $this->getRequest()->getSession()->setFlash('sonata_flash_error', 'Your staff could not be notified');
             }
         }        
-     //   return $this->redirect($this->generateUrl('home'));
+        return $this->redirect($this->generateUrl('home'));
     }
     
     public function getCountyByNameIdString($countyString) {
@@ -176,6 +175,5 @@ class NotificationController extends Controller
         if(count($notifyWhoChoices) > 0) return $notifyWhoChoices[key($notifyWhoChoices)];
         return "";
     }
-        
-
+   
 }

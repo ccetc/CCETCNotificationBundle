@@ -9,12 +9,15 @@ class NotificationBuilder {
     
     protected $container;
     protected $notificationInstanceAdmin;
+    protected $em;
+    protected $userRepository;
     
     public function __construct($container)
     {
         $this->container = $container;
         $this->notificationInstanceAdmin = $this->container->get('ccetc.notification.admin.notificationinstance');
-        
+        $this->em = $this->container->get('doctrine')->getEntityManager();
+        $this->userRepository = $this->container->get('doctrine')->getRepository('ApplicationSonataUserBundle:User');
     }
     
     public function getContainer()
@@ -50,29 +53,22 @@ class NotificationBuilder {
         $notificationAdmin = $this->container->get('ccetc.notification.admin.notification');        	    
         $notificationAdmin->create($notification);
 
-        $instances = array();
-        
         if(isset($options['users'])) {
             if(is_array($options['users']) || get_class($options['users']) == "Doctrine\ORM\PersistentCollection") {
                 foreach($options['users'] as $user)
                 {
-                    $instances[] = $this->createNotificationInstance($notification, $user);
+                    $this->createNotificationInstance($notification, $user);
                 }
             } else {
-                $instances[] = $this->createNotificationInstance($notification, $options['users']);
+                $this->createNotificationInstance($notification, $options['users']);
             }
         }
         if(isset($options['user_ids'])) {
-            foreach($options['user_ids'] as $user_id)
-            {
-                $instances[] = $this->createNotificationInstance($notification->getId(), $user_id, true);
-            }            
+            $this->batchCreateNotificationInstances($notification->getId(), $options['user_ids']);         
         }
         if(isset($options['user'])) {
-            $instances[] = $this->createNotificationInstance($notification, $options['user']);
+            $this->createNotificationInstance($notification, $options['user']);
         }
-
-        $this->notificationInstanceAdmin->batchCreate($instances);
         
         return $notification;
     }
@@ -87,16 +83,40 @@ class NotificationBuilder {
         $instance = new \CCETC\NotificationBundle\Entity\NotificationInstance();
 
         if($byId) {
-            $em = $this->container->get('doctrine')->getEntityManager();
-            $instance->setUser($em->getReference('ApplicationSonataUserBundle:User', $user));
-            $instance->setNotification($em->getReference('CCETCNotificationBundle:Notification', $notification));            
+            $instance->setUser($this->em->getReference('ApplicationSonataUserBundle:User', $user));
+            $instance->setNotification($this->em->getReference('CCETCNotificationBundle:Notification', $notification));            
         } else {
             $instance->setUser($user);
             $instance->setNotification($notification);                        
         }
         
-        //$this->notificationInstanceAdmin->create($instance);
+        $this->notificationInstanceAdmin->create($instance);
         
         return $instance;
-    }    
+    }
+    
+    /**
+     * Clear the EM every 20 inserts for performance reasons.
+     * 
+     * Setting relations with references is a minor performance improvement, but necessary since we loose the objects when we clear the EM.
+     * 
+     * @param type $notification_id
+     * @param type $user_ids 
+     */
+    public function batchCreateNotificationInstances($notification_id, $user_ids)
+    {
+        $i = 0;
+        foreach($user_ids as $user_id)
+        {
+            $notificationInstance = new \CCETC\NotificationBundle\Entity\NotificationInstance();
+            $notificationInstance->setUser($this->em->getReference('ApplicationSonataUserBundle:User', $user_id));
+            $notificationInstance->setNotification($this->em->getReference('CCETCNotificationBundle:Notification', $notification_id));
+            $this->notificationInstanceAdmin->create($notificationInstance);
+            
+            if (($i % 20) == 0) {
+                $this->em->clear();
+            }
+            $i++;
+        }
+    }
 }
