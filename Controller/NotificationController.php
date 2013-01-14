@@ -21,8 +21,8 @@ class NotificationController extends Controller
         
         $feedForm = $this->getFeedForm();
         
-        $notifyWhoChoices = $this->getNotifyWhoChoices();
-        $notifyWhoText = $this->getNotifyWhoText();
+        $notifyWhoChoices = $deliveryHelper->getNotifyWhoChoices();
+        $notifyWhoText = $deliveryHelper->getNotifyWhoText();
         $showNotifyWhoText = count($notifyWhoChoices) == 1;
         
         $utilityHelper->batchSetActive($instances, false);
@@ -31,7 +31,7 @@ class NotificationController extends Controller
         return $this->render('CCETCNotificationBundle:Feed:_feed.html.twig', array(
             'instances' => $instances,
             'feedForm' => $feedForm->createView(),
-            'notifyWhoChoices' => $this->getNotifyWhoChoices(),
+            'notifyWhoChoices' => $deliveryHelper->getNotifyWhoChoices(),
             'notifyWhoText' => $notifyWhoText,
             'showNotifyWhoText' => $showNotifyWhoText
         ));
@@ -42,9 +42,10 @@ class NotificationController extends Controller
         $user = $this->container->get('security.context')->getToken()->getUser();
         $request = $this->getRequest();
         $feedForm = $this->getFeedForm();
+        $deliveryHelper = $this->container->get('ccetc.notification.delivery');
         
-        if(count($this->getNotifyWhoChoices()) == 1) {
-            $feedForm->setData(array('notifyWho' => $this->getNotifyWhoText()));
+        if(count($deliveryHelper->getNotifyWhoChoices()) == 1) {
+            $feedForm->setData(array('notifyWho' => $deliveryHelper->getNotifyWhoText()));
         }
         
         $userRepository = $this->container->get('doctrine')->getRepository('ApplicationSonataUserBundle:User');
@@ -123,7 +124,8 @@ class NotificationController extends Controller
     }
     
     public function getFeedForm() {
-        $notifyWhoChoices = $this->getNotifyWhoChoices();
+        $deliveryHelper = $this->container->get('ccetc.notification.delivery');        
+        $notifyWhoChoices = $deliveryHelper->getNotifyWhoChoices();
         
         $builder = $this->createFormBuilder();
         
@@ -135,45 +137,6 @@ class NotificationController extends Controller
         
         $builder->add('message', 'textarea', array('label' => ''));
         return $builder->getForm();
-    }
-    
-    public function getNotifyWhoChoices()
-    {
-        $user = $this->container->get('security.context')->getToken()->getUser();
-        $notifyWhoChoices = array();
-        
-        if( $user->isSuperAdmin()) {
-            $notifyWhoChoices['allUsers'] = 'All Users';
-        }
-        
-        if($this->container->get('security.context')->isGranted('ROLE_NOTIFY_REGION_STAFF')) {
-            $notifyWhoChoices['region-'.$user->getWorkingRegion()->getId()] = 'Staff in '.$user->getWorkingRegion().' Region';
-            foreach($user->getWorkingRegion()->getCounties() as $county)
-            {
-                $notifyWhoChoices['county-'.$county->getId()] = 'Staff in '.$county.' County';
-            }
-        }
-        
-        if($this->container->get('security.context')->isGranted('ROLE_NOTIFY_COUNTY_STAFF')) {
-            $notifyWhoChoices['county-'.$user->getWorkingCounty()->getId()] = 'Staff in '.$user->getWorkingCounty().' County';
-        }
-        
-        if($user->hasSupervisees()) {
-            $notifyWhoChoices['supervisees'] = 'Staff I supervise';
-        }
-         
-        if($user->hasChildSupervisees()) {
-            $notifyWhoChoices['childSupervisees'] = 'Staff I supervise and staff they supervise';
-        }
-        
-        return $notifyWhoChoices;
-    }
-    
-    public function getNotifyWhoText()
-    {
-        $notifyWhoChoices = $this->getNotifyWhoChoices();
-        if(count($notifyWhoChoices) > 0) return $notifyWhoChoices[key($notifyWhoChoices)];
-        return "";
     }
    
 }

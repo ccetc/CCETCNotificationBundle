@@ -187,4 +187,43 @@ class DeliveryHelper {
         
         return $instancesUpdated;
     }
+    
+    public function getNotifyWhoChoices()
+    {
+        $user = $this->container->get('security.context')->getToken()->getUser();
+        $notifyWhoChoices = array();
+        
+        if( $user->isSuperAdmin()) {
+            $notifyWhoChoices['allUsers'] = 'All Users';
+        }
+        
+        if($this->container->get('security.context')->isGranted('ROLE_NOTIFY_REGION_STAFF')) {
+            $notifyWhoChoices['region-'.$user->getWorkingRegion()->getId()] = 'Staff in '.$user->getWorkingRegion().' Region';
+            foreach($user->getWorkingRegion()->getCounties() as $county)
+            {
+                $notifyWhoChoices['county-'.$county->getId()] = 'Staff in '.$county.' County';
+            }
+        }
+        
+        if($this->container->get('security.context')->isGranted('ROLE_NOTIFY_COUNTY_STAFF')) {
+            $notifyWhoChoices['county-'.$user->getWorkingCounty()->getId()] = 'Staff in '.$user->getWorkingCounty().' County';
+        }
+        
+        if($user->hasSupervisees()) {
+            $notifyWhoChoices['supervisees'] = 'Staff I supervise';
+        }
+         
+        if($user->hasChildSupervisees()) {
+            $notifyWhoChoices['childSupervisees'] = 'Staff I supervise and staff they supervise';
+        }
+        
+        return $notifyWhoChoices;
+    }
+    
+    public function getNotifyWhoText()
+    {
+        $notifyWhoChoices = $this->getNotifyWhoChoices();
+        if(count($notifyWhoChoices) > 0) return $notifyWhoChoices[key($notifyWhoChoices)];
+        return "";
+    }    
 }
